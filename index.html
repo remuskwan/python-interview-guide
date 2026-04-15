@@ -1,0 +1,1764 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Advanced Python Interview Guide</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('pre code').forEach(el=>hljs.highlightElement(el));});</script>
+<style>
+:root{
+  --bg:#0d1117; --bg2:#161b22; --bg3:#1f2630; --border:#30363d;
+  --fg:#e6edf3; --fg-muted:#8b949e; --accent:#58a6ff; --accent2:#7ee787;
+  --warn:#f0883e; --danger:#ff7b72; --quote:#d2a8ff;
+  --toc-w:260px; --topbar-h:0px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;padding:0;background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;font-size:15px;line-height:1.62}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── Layout ── */
+.layout{display:grid;grid-template-columns:var(--toc-w) minmax(0,1fr);max-width:1200px;margin:0 auto}
+
+/* ── Sidebar TOC (desktop) ── */
+nav.toc{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;border-right:1px solid var(--border);padding:24px 16px;background:var(--bg2)}
+nav.toc h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-muted);margin:0 0 12px}
+nav.toc ol{list-style:none;padding:0;margin:0;font-size:13px;counter-reset:sec}
+nav.toc ol li{counter-increment:sec;padding:4px 0}
+nav.toc ol li::before{content:counter(sec) ". ";color:var(--fg-muted)}
+nav.toc a{color:var(--fg)}
+nav.toc a:hover{color:var(--accent)}
+
+/* ── Mobile top bar (hidden on desktop) ── */
+#topbar{display:none}
+
+/* ── Main content ── */
+main{padding:48px 56px 96px;min-width:0}
+
+/* ── Hero ── */
+header.hero{border-bottom:1px solid var(--border);padding-bottom:24px;margin-bottom:32px}
+header.hero h1{margin:0 0 4px;font-size:30px;letter-spacing:-.01em}
+header.hero p.sub{color:var(--fg-muted);margin:0;font-size:14px}
+header.hero .tag{display:inline-block;padding:2px 8px;border:1px solid var(--border);border-radius:999px;color:var(--accent2);font-size:11px;margin-right:6px;letter-spacing:.03em;margin-bottom:10px}
+
+/* ── Sections ── */
+section{margin-bottom:56px;scroll-margin-top:calc(var(--topbar-h) + 12px)}
+section h2{font-size:24px;border-bottom:1px solid var(--border);padding-bottom:8px;margin:0 0 18px;color:#fff}
+section h3{font-size:18px;margin:28px 0 10px;color:#fff}
+section h4{font-size:15px;margin:18px 0 6px;color:var(--accent2);text-transform:uppercase;letter-spacing:.05em}
+p{margin:0 0 12px}
+
+/* ── Code ── */
+code{background:var(--bg3);padding:1px 6px;border-radius:4px;font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:13.5px}
+pre{background:#0b1018;border:1px solid var(--border);border-radius:8px;padding:14px 16px;overflow-x:auto;margin:8px 0 14px;font-size:13px;line-height:1.5;-webkit-overflow-scrolling:touch}
+pre code{background:transparent;padding:0;font-size:13px}
+
+/* ── Lists ── */
+ul,ol{margin:4px 0 14px;padding-left:22px}
+li{margin:3px 0}
+
+/* ── Tables — scrollable container on small screens ── */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0 16px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:480px}
+th,td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--bg3);color:var(--fg)}
+
+/* ── Callouts ── */
+.callout{border-left:3px solid var(--accent);background:var(--bg2);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.callout.warn{border-color:var(--warn)}
+.callout.danger{border-color:var(--danger)}
+.callout.tip{border-color:var(--accent2)}
+.callout .label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--fg-muted);margin-bottom:4px;font-weight:600}
+
+/* ── Q&A ── */
+.qa{border:1px solid var(--border);background:var(--bg2);border-radius:8px;padding:14px 18px;margin:14px 0}
+.qa .q{color:#fff;font-weight:600;margin:0 0 6px}
+.qa .q::before{content:"Q. ";color:var(--accent)}
+.qa .a{color:var(--fg);margin:0}
+.qa .a::before{content:"A. ";color:var(--accent2);font-weight:600}
+.qa + .qa{margin-top:8px}
+
+/* ── Misc ── */
+.oneliner{color:var(--quote);font-style:italic;border-left:2px dashed var(--quote);padding-left:10px;margin:8px 0}
+.kbd{font-family:inherit;background:var(--bg3);border:1px solid var(--border);border-bottom-width:2px;padding:1px 6px;border-radius:4px;font-size:12px}
+hr{border:none;border-top:1px solid var(--border);margin:32px 0}
+footer{color:var(--fg-muted);font-size:12px;text-align:center;padding:32px 0;border-top:1px solid var(--border)}
+
+/* ══════════════════════════════════════
+   TABLET  (≤900px) — collapse sidebar
+   ══════════════════════════════════════ */
+@media(max-width:900px){
+  :root{--topbar-h:52px}
+
+  /* top bar */
+  #topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:200;
+    background:var(--bg2);border-bottom:1px solid var(--border);
+    padding:0 16px;height:var(--topbar-h);
+  }
+  #topbar .site-title{font-size:13px;font-weight:600;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #toc-btn{
+    background:none;border:1px solid var(--border);border-radius:6px;
+    color:var(--fg);cursor:pointer;padding:6px 10px;font-size:13px;
+    display:flex;align-items:center;gap:6px;flex-shrink:0;white-space:nowrap;
+  }
+  #toc-btn:hover{background:var(--bg3)}
+  #toc-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+
+  /* layout: single column, TOC out of flow */
+  .layout{grid-template-columns:1fr;padding-top:0}
+
+  /* sidebar becomes a slide-in drawer */
+  nav.toc{
+    position:fixed;top:var(--topbar-h);left:0;
+    height:calc(100vh - var(--topbar-h));
+    width:min(280px, 85vw);
+    border-right:1px solid var(--border);
+    transform:translateX(-100%);
+    transition:transform .22s ease;
+    z-index:199;
+    overflow-y:auto;
+  }
+  nav.toc.open{transform:translateX(0)}
+
+  /* backdrop */
+  #toc-backdrop{
+    display:none;position:fixed;inset:0;top:var(--topbar-h);
+    background:rgba(0,0,0,.55);z-index:198;
+  }
+  #toc-backdrop.visible{display:block}
+
+  main{padding:28px 20px 72px}
+  header.hero h1{font-size:24px}
+  section h2{font-size:20px}
+  section h3{font-size:16px}
+  section h4{font-size:13px}
+  code{font-size:12.5px}
+  pre{font-size:12px}
+  table{font-size:12.5px}
+}
+
+/* ══════════════════════════════════════
+   MOBILE  (≤480px) — tighten further
+   ══════════════════════════════════════ */
+@media(max-width:480px){
+  main{padding:20px 14px 64px}
+  header.hero h1{font-size:20px}
+  header.hero p.sub{font-size:13px}
+  section h2{font-size:18px}
+  section h3{font-size:15px}
+  body{font-size:14px}
+  .qa{padding:12px 14px}
+  pre{padding:10px 12px;font-size:11.5px}
+  pre code{font-size:11.5px}
+}
+
+/* ── Print ── */
+@media print{
+  #topbar,nav.toc,#toc-backdrop{display:none!important}
+  .layout{grid-template-columns:1fr;max-width:none}
+  main{padding:24px}
+  pre,code{font-size:11px}
+  section{page-break-inside:auto}
+  section h2{page-break-after:avoid}
+  .qa{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile top bar (visible on tablet/phone) -->
+<div id="topbar">
+  <span class="site-title">Advanced Python Interview Guide</span>
+  <button id="toc-btn" aria-label="Toggle table of contents" aria-expanded="false" aria-controls="toc-nav">
+    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    Contents
+  </button>
+</div>
+<div id="toc-backdrop"></div>
+
+<div class="layout">
+<nav class="toc" id="toc-nav">
+<h2>Contents</h2>
+<ol>
+<li><a href="#intro">Orientation</a></li>
+<li><a href="#execmodel">Execution Model</a></li>
+<li><a href="#objmodel">Object &amp; Data Model</a></li>
+<li><a href="#memory">Memory Management</a></li>
+<li><a href="#concurrency">Concurrency &amp; the GIL</a></li>
+<li><a href="#generators">Generators, Coroutines, asyncio</a></li>
+<li><a href="#functions">Functions, Decorators, Descriptors</a></li>
+<li><a href="#typing">Typing &amp; Dataclasses</a></li>
+<li><a href="#stdlib">Standard Library Deep Cuts</a></li>
+<li><a href="#gotchas">Gotchas &amp; Antipatterns</a></li>
+<li><a href="#proscons">Pros &amp; Cons of Python</a></li>
+<li><a href="#bestpractices">Best Practices</a></li>
+<li><a href="#perf">Performance &amp; Quant/HFT Lens</a></li>
+<li><a href="#mixedqa">Mixed Interview Q&amp;A</a></li>
+</ol>
+</nav>
+<main>
+<header class="hero">
+<span class="tag">Advanced</span><span class="tag">Python</span><span class="tag">Interview Prep</span>
+<h1>Advanced Python Interview Guide</h1>
+<p class="sub">A deep-dive reference for senior Python developer interviews at latency-sensitive firms. Concepts, internals, and interview-ready Q&amp;A.</p>
+</header>
+
+<section id="intro">
+<h2>1. Orientation — How to Use This Guide</h2>
+<p>This guide is tuned for senior Python developer interviews at latency-sensitive engineering firms: a technically demanding mix of Python internals, systems thinking, and low-latency engineering sensibility. It assumes you can already write Python fluently and focuses on the kind of <em>why</em> questions that come up once the interviewer probes past syntax.</p>
+
+<p>Each section follows the same shape:</p>
+<ul>
+<li><strong>Concept</strong> — a tight explanation of the underlying mechanism in CPython, with code that you could write on a whiteboard.</li>
+<li><strong>Talking points</strong> — one-liners you can drop into an answer to signal depth without monologuing.</li>
+<li><strong>Interview Q&amp;A</strong> — representative questions with model answers. A final "Mixed" section cross-cuts topics the way a real interviewer will.</li>
+</ul>
+
+<div class="callout tip">
+<div class="label">How to study this</div>
+Read each section once top-to-bottom. Then do a second pass where you cover the answers in the Q&amp;A boxes and talk through each one out loud — you will catch gaps the eye skipped over. For low-latency topics, always have a concrete number in your head (cache line size, GIL switch interval, dict load factor, etc.). Interviewers reward specificity.
+</div>
+
+<h3>What the interviewer actually cares about</h3>
+<p>At a latency-sensitive firm, Python is typically the glue around a C++ trading or infrastructure core — not a data-science role. Expect questions that probe:</p>
+<ul>
+<li><strong>Where Python is slow and how to get around it</strong> — the GIL, interpretation overhead, allocation costs, and the escape hatches (NumPy, Cython, pybind11, numba, shared memory).</li>
+<li><strong>Memory model awareness</strong> — reference counting, cyclic GC, <code>__slots__</code>, object layout, why <code>sys.getsizeof</code> lies, zero-copy with <code>memoryview</code> and the buffer protocol.</li>
+<li><strong>Concurrency literacy</strong> — when to reach for threads, asyncio, multiprocessing, and when none of the above are the right answer.</li>
+<li><strong>Production discipline</strong> — typing, packaging, profiling, testing, observability. They want someone who can ship Python that doesn't become the bottleneck in a trading day.</li>
+</ul>
+</section>
+<section id="execmodel">
+<h2>2. The Python Execution Model</h2>
+<p>Before memory, concurrency, or performance make sense, you need a clean mental model of what actually happens when the interpreter runs your code. Python is neither "purely interpreted" nor "purely compiled" — it is compiled to bytecode and then that bytecode is executed by an interpreter loop.</p>
+
+<h3>Source → AST → Bytecode → Frame → ceval</h3>
+<p>Given a <code>.py</code> file, CPython walks through roughly the following stages the first time the module is imported:</p>
+<ol>
+<li><strong>Tokenize / parse</strong> the source into a concrete syntax tree, then into an <strong>AST</strong> (the <code>ast</code> module exposes this).</li>
+<li><strong>Compile</strong> the AST into a <strong>code object</strong>: a block of immutable bytecode plus associated constants, names, free variables, line-number table, and exception-handler table.</li>
+<li><strong>Cache</strong> the code object as a <code>.pyc</code> file under <code>__pycache__/</code>, keyed by interpreter version and source hash/mtime, so subsequent imports skip parsing.</li>
+<li>At call time, the interpreter builds a <strong>frame object</strong> (one per function invocation): it holds the local variable array, value stack, code object reference, and caller pointer. Frames live on the heap, linked through <code>f_back</code> — this <em>is</em> Python's call stack.</li>
+<li>The core evaluation loop (<code>ceval.c</code>'s giant <code>switch</code> / computed-goto dispatch) iterates through the bytecode of the current frame, pushing and popping values on the frame's value stack.</li>
+</ol>
+
+<p>You can inspect every piece of this from pure Python:</p>
+<pre><code class="language-python">import dis, ast
+
+src = """
+def add(a, b):
+    return a + b
+"""
+
+tree = ast.parse(src)                 # AST
+code = compile(tree, "&lt;demo&gt;", "exec") # code object
+dis.dis(code)                         # disassemble bytecode
+</code></pre>
+
+<p>The output for <code>add</code> on CPython 3.12+ looks roughly like:</p>
+<pre><code class="language-text">  2           0 RESUME                   0
+
+  3           2 LOAD_FAST                0 (a)
+              4 LOAD_FAST                1 (b)
+              6 BINARY_OP                0 (+)
+             10 RETURN_VALUE</code></pre>
+
+<p>Every bytecode instruction is a single byte of opcode plus an argument byte (historically; modern CPython uses wordcode — 2-byte units with <code>EXTENDED_ARG</code> for wider operands). <code>ceval</code> reads each instruction and performs the corresponding action on the value stack. That is all "the Python interpreter" is at the lowest level.</p>
+
+<h3>Code objects are immutable and sharable</h3>
+<p>A code object is essentially compiled IR. It does not capture any runtime state — that lives in the frame. This is why you can <code>pickle</code> bytecode, why the same function body can be reused across instances with different closures, and why decorators can introspect <code>__code__.co_varnames</code>, <code>co_consts</code>, <code>co_names</code>, etc.</p>
+<pre><code class="language-python">def make_counter(start):
+    def inc():
+        nonlocal start
+        start += 1
+        return start
+    return inc
+
+inc = make_counter(10)
+inc.__code__.co_freevars   # ('start',) — captured by closure
+inc.__closure__            # tuple of cell objects holding the actual values
+</code></pre>
+
+<h3>The specializing adaptive interpreter (PEP 659, 3.11+)</h3>
+<p>Since 3.11, CPython watches hot bytecode and <strong>specializes</strong> instructions based on observed types. A generic <code>BINARY_OP</code> might get rewritten in-place to <code>BINARY_OP_ADD_INT</code> after seeing a few int-int additions, skipping the dispatch through <code>__add__</code>. If a later call sees a float, it deoptimizes back to the generic form. This is why 3.11+ is noticeably faster than 3.10 on real workloads without any JIT involvement.</p>
+
+<div class="callout">
+<div class="label">Talking point</div>
+"CPython is not a JIT, but since 3.11 it's a <em>specializing</em> interpreter. Hot instructions mutate into type-specialized variants in-place — the compiler is still ahead-of-time but the dispatch loop adapts. 3.13 is layering an experimental copy-and-patch JIT on top of this."
+</div>
+
+<h3>Startup and import: what <code>.pyc</code> actually saves</h3>
+<p>On import, Python computes the expected <code>.pyc</code> path and checks the magic number and source metadata. On a hit it loads the marshaled code object directly — no parser, no compiler. On a miss it goes through the full pipeline and writes the new <code>.pyc</code>. <code>.pyc</code> files do <em>not</em> contain machine code — they contain pickled bytecode. Startup cost in Python is overwhelmingly dominated by the number of modules imported, not by parsing.</p>
+
+<h3>Exception handling: zero-cost try, expensive except</h3>
+<p>Since 3.11, <code>try</code> blocks have effectively zero runtime cost — there is no <code>SETUP_EXCEPT</code> bytecode any more. Instead, each code object carries a compact <strong>exception table</strong> that maps bytecode offsets to handler offsets. Entering the <code>try</code> does nothing; on an exception the interpreter does a table lookup to find where to jump. That makes <code>try/except</code> cheap for the success path but exceptions themselves (with traceback construction) are still expensive. <strong>Never use exceptions as control flow in a hot loop.</strong></p>
+
+<h3>Interactive probing — the tools you want muscle memory for</h3>
+<pre><code class="language-python">import dis, sys, inspect
+
+dis.dis(func)                 # disassemble bytecode
+dis.show_code(func)           # code object metadata
+sys.getsizeof(x)              # shallow size of an object
+sys.getrefcount(x)            # reference count (+1 for the arg itself)
+inspect.getsource(func)       # source, if available
+inspect.signature(func)       # parameter inspection
+func.__code__.co_varnames     # local variable names
+func.__code__.co_consts       # constants captured at compile time
+</code></pre>
+
+<div class="qa">
+<p class="q">Walk me through what happens from the moment I run <code>python script.py</code> until my first line executes.</p>
+<p class="a">The interpreter binary initializes the runtime, sets up the GIL and the main thread state, imports a small set of built-in modules (<code>sys</code>, <code>builtins</code>, etc.), and then invokes the importer on the target file. For that file it tokenizes, parses to an AST, compiles to a code object, and caches a <code>.pyc</code> in <code>__pycache__</code>. It then builds a module object, assigns it to <code>sys.modules['__main__']</code>, creates a frame backed by that code object and the module's globals, and hands that frame to <code>ceval</code>, which starts dispatching bytecode. Every top-level statement runs as bytecode in that module frame; <code>def</code> and <code>class</code> are themselves just bytecode that builds function and class objects.</p>
+</div>
+
+<div class="qa">
+<p class="q">Is Python interpreted or compiled?</p>
+<p class="a">Both, in different senses. The source is compiled ahead of time to bytecode — the code object is a real compilation artifact, cached on disk as <code>.pyc</code>. But the bytecode is executed by a software interpreter (<code>ceval</code>) rather than by the CPU directly. Since 3.11, that interpreter specializes hot instructions based on observed types, and 3.13 ships an experimental copy-and-patch JIT behind a build flag. PyPy takes this all the way and traces and JITs Python directly to machine code.</p>
+</div>
+
+<div class="qa">
+<p class="q">Why is <code>try/except</code> basically free but raising an exception still costly?</p>
+<p class="a">Since 3.11 there is no bytecode to set up a try block — each code object carries a compact exception table mapping bytecode ranges to handler offsets. Entering the <code>try</code> emits no instruction at all. But when an exception is raised, CPython still constructs the exception object, walks the frames to build a traceback (allocating frame snapshots), and does the table lookup. Profiling shows raising a simple exception is hundreds of nanoseconds to a couple of microseconds. It's fine for truly exceptional paths; it's terrible as control flow in a hot loop. Use sentinels or explicit checks there.</p>
+</div>
+</section>
+<section id="objmodel">
+<h2>3. The Object &amp; Data Model</h2>
+<p>Python's object model is the piece that unlocks most of the "how does this actually work" questions. Once you internalize that everything is a <code>PyObject*</code> and every operation on it goes through a type's slot table, a lot of behavior that looks magical becomes mechanical.</p>
+
+<h3>Every value is a heap-allocated PyObject</h3>
+<p>A CPython object, at the C level, has a header with (at minimum) a reference count and a type pointer:</p>
+<pre><code class="language-c">typedef struct _object {
+    Py_ssize_t ob_refcnt;     // reference count
+    PyTypeObject *ob_type;    // type, aka the "class"
+} PyObject;</code></pre>
+<p>Everything else — attribute dictionaries, values, lengths, iterator state — is tacked on after that header depending on the type. There is no stack-allocated primitive. Even <code>x = 3</code> allocates (or retrieves a cached) <code>PyLongObject</code> on the heap and binds the name <code>x</code> to a pointer to it. This is the single biggest reason Python is slow in tight numeric loops: every operation chases pointers through headers, and every intermediate result is a fresh heap allocation.</p>
+
+<h3>Types are themselves objects</h3>
+<p><code>type</code> is both the built-in that creates classes and the metaclass of all built-in classes. <code>type(obj)</code> returns the type, which is itself an instance of <code>type</code>:</p>
+<pre><code class="language-python">type(3)           # &lt;class 'int'&gt;
+type(int)         # &lt;class 'type'&gt;
+type(type)        # &lt;class 'type'&gt;   (it is its own metaclass)
+isinstance(int, type)  # True
+</code></pre>
+
+<h3>The dunder protocol is the slot table</h3>
+<p>When you write <code>a + b</code>, CPython doesn't call a Python method — it looks at <code>type(a)-&gt;tp_as_number-&gt;nb_add</code>, a C slot in the type struct. For pure-Python classes, that slot points to a trampoline that dispatches to <code>__add__</code>. This is why dunder methods are looked up <em>on the type</em>, not on the instance:</p>
+<pre><code class="language-python">class C:
+    def __len__(self): return 5
+
+c = C()
+c.__len__ = lambda: 99    # instance attribute, ignored by len()
+len(c)                    # 5 — len() hits type(c).__len__
+</code></pre>
+
+<p>The dunders you need at your fingertips:</p>
+<table>
+<tr><th>Category</th><th>Methods</th></tr>
+<tr><td>Construction &amp; lifecycle</td><td><code>__new__</code>, <code>__init__</code>, <code>__del__</code></td></tr>
+<tr><td>Representation</td><td><code>__repr__</code>, <code>__str__</code>, <code>__format__</code>, <code>__bytes__</code></td></tr>
+<tr><td>Comparison</td><td><code>__eq__</code>, <code>__lt__</code>, <code>__hash__</code> (remember: overriding <code>__eq__</code> sets <code>__hash__</code> to <code>None</code>)</td></tr>
+<tr><td>Container</td><td><code>__len__</code>, <code>__getitem__</code>, <code>__setitem__</code>, <code>__contains__</code>, <code>__iter__</code>, <code>__next__</code>, <code>__reversed__</code></td></tr>
+<tr><td>Numeric</td><td><code>__add__</code>/<code>__radd__</code>/<code>__iadd__</code>, and the usual arithmetic / bitwise family</td></tr>
+<tr><td>Attribute access</td><td><code>__getattr__</code>, <code>__getattribute__</code>, <code>__setattr__</code>, <code>__delattr__</code>, <code>__dir__</code></td></tr>
+<tr><td>Callable / context</td><td><code>__call__</code>, <code>__enter__</code>/<code>__exit__</code>, <code>__aenter__</code>/<code>__aexit__</code></td></tr>
+<tr><td>Descriptors</td><td><code>__get__</code>, <code>__set__</code>, <code>__delete__</code>, <code>__set_name__</code></td></tr>
+</table>
+
+<h3>Attribute lookup — the full algorithm</h3>
+<p>When you write <code>obj.x</code>, CPython runs an algorithm that trips up a lot of candidates. Memorize it:</p>
+<ol>
+<li>Look up <code>x</code> on <code>type(obj)</code> walking the MRO. If found and it's a <strong>data descriptor</strong> (defines <code>__set__</code> or <code>__delete__</code>), call its <code>__get__</code> and return that.</li>
+<li>Otherwise look up <code>x</code> in <code>obj.__dict__</code> (or <code>__slots__</code> storage). If found, return it.</li>
+<li>Otherwise, if the earlier class-level lookup found a <strong>non-data descriptor</strong> (only <code>__get__</code>, e.g., a function / <code>@staticmethod</code> / <code>@classmethod</code>), call its <code>__get__</code>.</li>
+<li>If still nothing, call <code>type(obj).__getattr__(obj, 'x')</code> if defined.</li>
+<li>Raise <code>AttributeError</code>.</li>
+</ol>
+<p>The critical asymmetry: <strong>data descriptors override instance dicts, non-data descriptors do not</strong>. That is what makes <code>@property</code> immune to instance shadowing and what makes plain methods overridable by setting an attribute on the instance.</p>
+
+<h3>Descriptors — how @property, classmethod, staticmethod all work</h3>
+<pre><code class="language-python">class LoggedAttr:
+    def __set_name__(self, owner, name):
+        self.name = name
+    def __get__(self, obj, objtype=None):
+        if obj is None: return self
+        print(f"GET {self.name}")
+        return obj.__dict__[self.name]
+    def __set__(self, obj, value):
+        print(f"SET {self.name} = {value}")
+        obj.__dict__[self.name] = value
+
+class Order:
+    price = LoggedAttr()
+
+o = Order()
+o.price = 101.25   # SET price = 101.25
+o.price            # GET price
+</code></pre>
+<p><code>@property</code>, <code>functools.cached_property</code>, <code>classmethod</code>, <code>staticmethod</code>, and the machinery behind bound methods are all descriptors. <code>cached_property</code> is a <em>non-data</em> descriptor — that's how it stores the computed value in the instance dict and shadows itself on subsequent accesses.</p>
+
+<h3>MRO and C3 linearization</h3>
+<p>With multiple inheritance, the method resolution order is computed using the C3 algorithm. You can inspect it with <code>Cls.__mro__</code> or <code>Cls.mro()</code>. The rules you need to state: C3 preserves the local precedence order of each parent list, preserves monotonicity (a subclass's MRO is a linear extension of each parent's MRO), and raises <code>TypeError</code> at class-creation time if no consistent order exists.</p>
+<pre><code class="language-python">class A: pass
+class B(A): pass
+class C(A): pass
+class D(B, C): pass
+D.__mro__   # (D, B, C, A, object)
+</code></pre>
+<p><code>super()</code> walks the MRO from the current class forward — not "to the parent." That's why cooperative multiple inheritance works: every class in a diamond gets called exactly once as long as each calls <code>super().method(...)</code>.</p>
+
+<h3><code>__slots__</code> — cheap and fast instances</h3>
+<p>By default, instance attributes live in a per-instance dict. With <code>__slots__</code>, CPython reserves a fixed array of descriptors on the class instead. This:</p>
+<ul>
+<li>Saves memory (no per-instance dict — 100+ bytes per instance at minimum).</li>
+<li>Speeds up attribute access (no hash, just an index).</li>
+<li>Prevents accidental attribute creation (great for bug-prevention in data-model classes).</li>
+</ul>
+<pre><code class="language-python">class Tick:
+    __slots__ = ("ts", "bid", "ask")
+    def __init__(self, ts, bid, ask):
+        self.ts, self.bid, self.ask = ts, bid, ask
+
+import sys
+sys.getsizeof(Tick(0,1,2))     # ~48 bytes vs ~152 for __dict__ equivalent
+</code></pre>
+<p>Gotchas: subclasses need their own <code>__slots__</code> (or they grow a dict); <code>__slots__</code> plus multiple inheritance with non-empty slot classes is restricted; you lose <code>__weakref__</code> unless you include it. In tight market-data code paths, <code>__slots__</code> is essentially free performance.</p>
+
+<div class="callout tip">
+<div class="label">Quant relevance</div>
+A trading signal that processes 10M ticks per minute over Python objects is going to spend significant time in allocator and attribute-lookup code. Slotted classes and NumPy structured arrays / record arrays are the two canonical tools for collapsing that overhead.
+</div>
+
+<div class="qa">
+<p class="q">What's the difference between <code>__new__</code> and <code>__init__</code>?</p>
+<p class="a"><code>__new__</code> is a static method on the type that allocates and returns the instance — it's where you'd intercept construction for singletons, interning, or subclassing immutable types like <code>tuple</code> or <code>int</code>. <code>__init__</code> takes the already-constructed instance and initializes it in place; it must return <code>None</code>. You override <code>__new__</code> when you need to actually change what object is returned; you override <code>__init__</code> when you just want to set state.</p>
+</div>
+
+<div class="qa">
+<p class="q">I set <code>obj.method = lambda self: ...</code> and it didn't behave as a method. Why?</p>
+<p class="a">Functions become bound methods via the descriptor protocol — specifically, the non-data descriptor <code>__get__</code> on a function object returns a <code>MethodType</code> that binds <code>self</code>. That only happens when the function is found on the <em>type</em>, not on the instance. A function assigned directly to <code>obj.method</code> is just an attribute; calling <code>obj.method()</code> calls it with zero arguments. Assign it to the class (or wrap it in <code>types.MethodType(func, obj)</code>) if you want binding.</p>
+</div>
+
+<div class="qa">
+<p class="q">When should I use <code>__slots__</code>?</p>
+<p class="a">When you have many instances of a small fixed-shape class and memory or attribute-access speed matters. Typical candidates: tick records, order-book levels, graph nodes, cache entries. Don't reach for it on every class — you lose <code>__dict__</code>, inheritance gets fiddly, and it complicates serialization. And always measure: sometimes a <code>@dataclass(slots=True)</code> or a NumPy structured array is the better answer.</p>
+</div>
+</section>
+<section id="memory">
+<h2>4. Memory Management</h2>
+<p>CPython's memory story is deceptively simple: <strong>reference counting</strong> for prompt reclamation, plus a <strong>generational cycle collector</strong> for the edge cases refcounting can't handle, on top of a specialized <strong>small-object allocator</strong> (<code>pymalloc</code>). Understanding the interaction between these three pieces is what the advanced questions probe.</p>
+
+<h3>Reference counting is the primary mechanism</h3>
+<p>Every <code>PyObject</code> header starts with a <code>Py_ssize_t ob_refcnt</code>. Every assignment, argument pass, return, container insertion, and closure capture increments or decrements that count via <code>Py_INCREF</code> / <code>Py_DECREF</code>. When the count hits zero, the object is deallocated immediately — its type's <code>tp_dealloc</code> runs, it decrefs any children (recursively freeing them), and returns the memory to <code>pymalloc</code>.</p>
+
+<pre><code class="language-python">import sys
+
+x = [1, 2, 3]
+sys.getrefcount(x)   # 2: one for `x`, one for the argument binding
+y = x
+sys.getrefcount(x)   # 3
+del y
+sys.getrefcount(x)   # 2
+</code></pre>
+
+<p>Consequences you should be able to cite on the spot:</p>
+<ul>
+<li><strong>Deterministic destruction</strong>: objects are usually freed the instant the last reference goes out of scope. This is why <code>with open(...) as f:</code> works naturally even without the context manager — though you should always use it for clarity and safety under exceptions.</li>
+<li><strong>No stop-the-world for most work</strong> — unlike tracing GCs, refcounting spreads the cost across the program. But it makes every pointer assignment more expensive than in a refcount-free runtime.</li>
+<li><strong>Cycles leak</strong> without help. <code>a.child = b; b.parent = a</code> would never reach zero without the cycle collector.</li>
+<li>The refcount field is the reason the GIL exists in the way it does — <code>Py_INCREF</code>/<code>Py_DECREF</code> are not atomic by default, and making them atomic has a measurable cost. PEP 703 (no-GIL / free threading) makes them atomic with biased reference counting to recover performance.</li>
+</ul>
+
+<h3>The generational cycle collector</h3>
+<p>The <code>gc</code> module layers a mark-and-sweep cycle collector on top of refcounting. Only container types (those whose type struct has <code>tp_traverse</code> defined) are tracked — integers, floats, strings, and simple tuples of only non-container objects aren't. That's both why GC is relatively cheap and why you can't just disable it for latency: the objects being tracked are exactly the ones most likely to form cycles.</p>
+
+<p>Generations work like most tracing GCs: new objects go into generation 0, survive into 1, then 2. Thresholds on the number of allocations-minus-deallocations trigger collection:</p>
+<pre><code class="language-python">import gc
+gc.get_threshold()   # (700, 10, 10) default: gen0 every ~700 allocs, gen1 every 10 gen0 sweeps, gen2 every 10 gen1 sweeps
+gc.get_count()       # live counts per generation
+gc.collect(generation=2)
+gc.disable()         # caveat emptor — cycles will leak until re-enabled
+</code></pre>
+
+<div class="callout warn">
+<div class="label">Latency gotcha</div>
+A gen2 collection on a large long-lived heap can stall for milliseconds to tens of milliseconds. In latency-sensitive Python tools it is a common trick to <code>gc.disable()</code> during a hot path and re-enable it (or <code>gc.collect()</code> explicitly) at a known quiescent point. If you do this, you must be sure your code does not create long-lived cycles or you will OOM.
+</div>
+
+<h3>The private heap and <code>pymalloc</code></h3>
+<p>CPython does not call <code>malloc</code> for every object. Instead, allocations smaller than 512 bytes go through <code>pymalloc</code>, a pool allocator:</p>
+<ul>
+<li><strong>Arenas</strong> are 256 KB slabs of memory obtained from the system allocator.</li>
+<li>Each arena is carved into 4 KB <strong>pools</strong>, and each pool serves a single size class (multiples of 16 bytes).</li>
+<li>Each pool is carved into fixed-size <strong>blocks</strong> which are the actual objects.</li>
+</ul>
+<p>The upshot: allocating a small Python object is typically a push onto a per-size-class free list — very fast, and it keeps same-sized objects close together in memory (which matters a lot more than people think for cache behavior). Allocations larger than 512 bytes fall through to the system allocator.</p>
+
+<p>You can turn on allocation debugging and inspect the internal arenas:</p>
+<pre><code class="language-python">import sys, tracemalloc
+
+tracemalloc.start()
+# ... run code ...
+snap = tracemalloc.take_snapshot()
+for stat in snap.statistics('lineno')[:10]:
+    print(stat)
+</code></pre>
+
+<h3>Caches, singletons, and interning</h3>
+<p>CPython caches a handful of immutable values to avoid allocating new objects for common cases. The ones interviewers love to ask about:</p>
+<ul>
+<li><strong>Small ints cache</strong> — integers in <code>[-5, 256]</code> are preallocated singletons. This is why <code>256 is 256</code> is True in every context but <code>257 is 257</code> may or may not be, depending on whether the literals were compiled into the same code object (where the compiler may intern them) vs constructed at runtime.</li>
+<li><strong>Interned strings</strong> — identifiers and short strings that look like identifiers are automatically interned. You can force interning with <code>sys.intern(s)</code>, which is useful when you store lots of string keys and want fast <code>==</code> and <code>hash</code>.</li>
+<li><strong>Empty tuple, empty bytes, empty frozenset</strong> are singletons.</li>
+<li><strong>None</strong>, <strong>True</strong>, <strong>False</strong> are singletons — that's why <code>x is None</code> is both idiomatic and correct.</li>
+</ul>
+<pre><code class="language-python">a = 256; b = 256;  a is b    # True
+a = 257; b = 257;  a is b    # False (usually)
+import sys
+sys.intern("long-identifier-like-string") is sys.intern("long-identifier-like-string")  # True
+</code></pre>
+
+<h3>Weak references</h3>
+<p>Normal references keep objects alive. <code>weakref</code> lets you hold a pointer that does not bump the refcount. Perfect for caches, observer patterns, and parent-pointers that would otherwise form cycles.</p>
+<pre><code class="language-python">import weakref
+
+class Book: pass
+b = Book()
+r = weakref.ref(b)
+r() is b                 # True — dereference
+del b
+r()                      # None — object has been collected
+</code></pre>
+<p>Not every type supports weakrefs — <code>int</code>, <code>str</code>, <code>tuple</code>, and <code>list</code> don't (no <code>__weakref__</code> slot). Classes with <code>__slots__</code> need to explicitly include <code>__weakref__</code> in the slot list to support them.</p>
+
+<h3><code>sys.getsizeof</code> lies to you (kind of)</h3>
+<p><code>getsizeof</code> returns the <em>shallow</em> size — it includes the object's header and its own directly allocated storage, but not the things it references. For a <code>list</code> of dicts you need to walk the structure yourself, or use <code>pympler.asizeof</code>.</p>
+<pre><code class="language-python">import sys
+sys.getsizeof([])         # ~56 bytes — the empty list object itself
+sys.getsizeof([1,2,3])    # ~88 bytes — header + three pointers, NOT including the ints
+sys.getsizeof("")         # ~49
+sys.getsizeof({})         # ~64 — empty dict has a special compact form
+</code></pre>
+
+<h3>Buffer protocol, <code>memoryview</code>, and zero-copy</h3>
+<p>The buffer protocol is how types like <code>bytes</code>, <code>bytearray</code>, <code>array.array</code>, and NumPy arrays expose a pointer into raw memory. <code>memoryview</code> is the Python-level wrapper. It lets you slice, reshape, and hand buffers to C code <strong>without copying</strong>, which is critical for any code that touches market data frames or shared memory.</p>
+<pre><code class="language-python">buf = bytearray(1024)
+mv = memoryview(buf)
+header, body = mv[:8], mv[8:]   # zero-copy slicing
+body.cast('d')[0] = 3.14        # interpret as doubles, in place
+</code></pre>
+
+<h3><code>__del__</code> and finalizers — just don't</h3>
+<p>Override <code>__del__</code> only with extreme caution. It runs at an unpredictable time, can resurrect its object, suppresses exceptions, and interacts badly with cycles. Use <code>weakref.finalize</code> or a context manager instead. If you're tempted to use <code>__del__</code> to close a socket or file handle, write a context manager — your future self will thank you.</p>
+
+<div class="callout tip">
+<div class="label">Interview one-liner</div>
+"CPython uses refcounting for prompt destruction and a generational cycle collector for the remainder. Refcounting is what makes RAII-style resource management work without GC pauses, and it's also what forced the GIL's specific design."
+</div>
+
+<div class="qa">
+<p class="q">Why does Python need both reference counting and a garbage collector?</p>
+<p class="a">Refcounting handles 99% of cleanup promptly and cheaply — as soon as the last reference goes away, the object is freed. But refcounting can't handle reference cycles: two objects pointing at each other will never hit zero. The generational cycle collector exists solely to find and break those cycles. It only tracks container types that can participate in cycles, and it runs periodically based on allocation thresholds. You can disable it with <code>gc.disable()</code> in a hot path if you can guarantee no cycles.</p>
+</div>
+
+<div class="qa">
+<p class="q">What does <code>__slots__</code> do to memory, and when does it hurt?</p>
+<p class="a">A normal instance stores attributes in a per-instance <code>__dict__</code>, which adds roughly 100+ bytes of overhead and does a hash lookup on every access. <code>__slots__</code> replaces that with a fixed array of C-level descriptors on the class, so attribute access becomes an array index and the instance loses its dict entirely. Memory savings are substantial at scale. The costs: you can't add arbitrary attributes, subclassing has to be careful (subclasses need their own slots or they regrow a dict), multiple inheritance with non-empty slots is restricted, and you lose weakref support unless you opt in. For a market-data <code>Tick</code> class you instantiate millions of times, <code>__slots__</code> is free money.</p>
+</div>
+
+<div class="qa">
+<p class="q">Explain the difference between shallow and deep copy, and when you need each.</p>
+<p class="a"><code>copy.copy</code> constructs a new container with the same element references — mutating a nested element affects both copies. <code>copy.deepcopy</code> recursively reconstructs the entire object graph and correctly handles cycles via a memo dict. Shallow copy is the right default when elements are immutable or when you want shared subobjects; deep copy is for fully independent snapshots. Deep copy is expensive: it pickles semantics and walks the whole graph, so in hot paths you usually want a type-specific clone (<code>list(x)</code>, <code>dict(x)</code>, <code>np.copy(arr)</code>) rather than the generic function.</p>
+</div>
+
+<div class="qa">
+<p class="q">I noticed my Python process's RSS grows after a big workload and doesn't shrink. Is that a leak?</p>
+<p class="a">Probably not in the CPython sense — it's usually allocator fragmentation. <code>pymalloc</code> can release an entire arena back to the OS only when every block inside it is free, and long-lived objects scattered across arenas prevent that. You can confirm with <code>tracemalloc</code> or <code>gc.get_objects()</code> that the Python-visible object count is stable. Real leaks usually show up as unbounded growth in a specific allocation site. Fixes: avoid long-lived small objects mixed with short-lived ones, use <code>__slots__</code>, or, for worker pools, recycle subprocesses after N tasks.</p>
+</div>
+</section>
+<section id="concurrency">
+<h2>5. Concurrency, Parallelism, and the GIL</h2>
+<p>This is the single most asked-about topic in Python interviews, and the section where candidates most often fall back on buzzword-level answers. Aim to describe mechanism, not slogans.</p>
+
+<h3>What the GIL actually is</h3>
+<p>The Global Interpreter Lock is a mutex held by the CPython interpreter loop that serializes access to Python object state. At any moment, exactly one OS thread in a given interpreter can be executing Python bytecode. It does <strong>not</strong> make individual bytecode operations atomic in any useful sense beyond "one instruction runs at a time" — but that one-at-a-time-ness is enough to make refcounting safe without per-object locks.</p>
+<p>The GIL is not a language-level requirement. It's an implementation detail of CPython that the broader ecosystem has come to rely on through decades of C extensions. Jython doesn't have one. IronPython doesn't. PyPy has a GIL but with different semantics. And CPython 3.13 ships an optional <strong>free-threaded</strong> build (PEP 703) that removes it.</p>
+
+<h3>How the GIL is scheduled</h3>
+<p>Since Python 3.2, the GIL uses a cooperative + preemptive scheme:</p>
+<ul>
+<li>A running thread holds the GIL until either (a) it blocks on I/O or explicitly releases it, or (b) a configurable interval elapses.</li>
+<li>The interval is controlled by <code>sys.setswitchinterval(seconds)</code> and defaults to <strong>5 ms</strong>. You can read it with <code>sys.getswitchinterval()</code>.</li>
+<li>When the interval ticks, the running thread signals waiters and drops the lock; another thread takes it.</li>
+</ul>
+<p>Crucially, C extensions can (and should) release the GIL around long-running C work using the <code>Py_BEGIN_ALLOW_THREADS</code> / <code>Py_END_ALLOW_THREADS</code> macros. NumPy, <code>hashlib</code>, the I/O subsystem, and most of the compression libraries all do this — which is why "Python threads are useless" is overstated.</p>
+
+<pre><code class="language-python">import sys
+sys.getswitchinterval()     # 0.005
+sys.setswitchinterval(0.001)  # aggressive
+</code></pre>
+
+<h3>Atomicity: what is and isn't safe without a lock</h3>
+<p>A handful of operations are atomic in CPython because they correspond to a single bytecode instruction that doesn't drop the GIL:</p>
+<ul>
+<li><code>x = y</code> (simple name binding)</li>
+<li><code>L.append(item)</code>, <code>D[k] = v</code>, <code>D.get(k)</code> for built-in types</li>
+<li><code>L.extend(other)</code>, <code>D.update(other)</code></li>
+</ul>
+<p>But operations like <code>x += 1</code> are <strong>not</strong> atomic: they compile to <code>LOAD → ADD → STORE</code>, and the GIL can be released between those. Likewise, anything that invokes Python-level methods (including <code>__hash__</code>, <code>__eq__</code>) can yield. The safe default is: <strong>assume nothing is atomic, use locks</strong>. The exceptions above are for understanding CPython, not for shipping code.</p>
+
+<h3>The standard library toolbox</h3>
+<table>
+<tr><th>Tool</th><th>Best for</th><th>Key cost</th></tr>
+<tr><td><code>threading.Thread</code></td><td>I/O-bound concurrency, blocking on syscalls, talking to blocking C libraries</td><td>GIL contention; context-switch overhead</td></tr>
+<tr><td><code>asyncio</code></td><td>Tens of thousands of concurrent network connections; cooperative I/O</td><td>Coloring problem; one blocking call stalls the loop</td></tr>
+<tr><td><code>multiprocessing</code></td><td>CPU-bound parallelism; sandboxing; avoiding the GIL entirely</td><td>Fork/spawn cost, IPC serialization, memory duplication</td></tr>
+<tr><td><code>concurrent.futures</code></td><td>High-level Thread/Process pools with a <code>Future</code> API</td><td>Thin wrapper — inherits the cost of the underlying executor</td></tr>
+<tr><td>Subinterpreters (PEP 684, 3.12+)</td><td>Multiple interpreters in one process, each with its own GIL</td><td>Still maturing; C ext compatibility is rough</td></tr>
+<tr><td>Free-threaded build (PEP 703, 3.13+)</td><td>True thread parallelism in CPython without multiprocess IPC</td><td>Single-threaded overhead; C ext rebuilds required</td></tr>
+</table>
+
+<h3>Threads — when they help</h3>
+<p>Threads are the right answer whenever the bottleneck is outside Python: blocking syscalls, database drivers, HTTP clients, or C extensions that release the GIL. They're also fine for small amounts of background work. They're the wrong answer for CPU-bound Python code — you will see negative scaling because of GIL contention plus context-switch overhead.</p>
+<pre><code class="language-python">import threading, queue, requests
+
+q = queue.Queue()
+def worker():
+    while (url := q.get()) is not None:
+        try:
+            q.put_result(requests.get(url, timeout=5))
+        finally:
+            q.task_done()
+
+threads = [threading.Thread(target=worker, daemon=True) for _ in range(16)]
+for t in threads: t.start()
+</code></pre>
+
+<h3>asyncio — the model</h3>
+<p>asyncio is a single-threaded cooperative scheduler over a non-blocking I/O multiplexer (<code>epoll</code> / <code>kqueue</code> / IOCP). A <strong>coroutine</strong> is a resumable function; <strong>await</strong> yields control back to the loop; the loop wakes coroutines when their awaited futures complete. Under the hood, a <code>Task</code> is the scheduler-visible handle that drives a coroutine forward.</p>
+<pre><code class="language-python">import asyncio
+
+async def fetch(name, delay):
+    await asyncio.sleep(delay)
+    return name
+
+async def main():
+    tasks = [asyncio.create_task(fetch(f"t{i}", i * 0.1)) for i in range(5)]
+    results = await asyncio.gather(*tasks)
+    print(results)
+
+asyncio.run(main())
+</code></pre>
+<p>Four things to drill:</p>
+<ol>
+<li><code>async def f():</code> returns a coroutine object <em>without running it</em>. You need <code>await</code>, <code>asyncio.run</code>, or <code>create_task</code> to actually drive it.</li>
+<li>A coroutine that blocks (a sleep that doesn't use <code>asyncio.sleep</code>, a sync DB call, a <code>time.sleep</code>) stalls the entire loop. This is the "don't block the event loop" rule. Use <code>loop.run_in_executor</code> to offload blocking work to a thread or process pool.</li>
+<li><code>asyncio.gather</code> schedules concurrently and returns a list; <code>asyncio.wait</code> gives you more control with first-complete semantics; <code>asyncio.TaskGroup</code> (3.11+) is the structured-concurrency version that cancels siblings on failure.</li>
+<li>Exceptions in unawaited tasks will be swallowed at GC time — always use <code>TaskGroup</code> or explicit <code>await</code>/<code>exception()</code>.</li>
+</ol>
+
+<h3>multiprocessing — when you really need cores</h3>
+<p><code>multiprocessing</code> sidesteps the GIL by running separate Python processes and coordinating with IPC. The price is real:</p>
+<ul>
+<li><strong>Startup</strong>: <code>fork</code> is fast but shares memory copy-on-write and doesn't play well with threads; <code>spawn</code> is slower but portable and safer; <code>forkserver</code> is a middle ground. Pick <code>spawn</code> if you will be running on macOS or alongside threads.</li>
+<li><strong>Serialization</strong>: arguments and return values cross process boundaries via <code>pickle</code>. Large objects are a tax.</li>
+<li><strong>Shared memory</strong>: <code>multiprocessing.shared_memory.SharedMemory</code> and <code>Manager</code> let you share state, but neither is free. For NumPy arrays, <code>shared_memory</code>-backed arrays are a common pattern to avoid copying.</li>
+</ul>
+
+<pre><code class="language-python">from concurrent.futures import ProcessPoolExecutor
+
+def work(chunk):
+    return sum(x * x for x in chunk)
+
+with ProcessPoolExecutor(max_workers=8) as ex:
+    results = list(ex.map(work, chunks))
+</code></pre>
+
+<h3>Free-threaded CPython (PEP 703)</h3>
+<p>CPython 3.13 ships an opt-in build where the GIL is removed. The techniques used to keep refcounting correct without a global lock:</p>
+<ul>
+<li><strong>Biased reference counting</strong> — each object has an "owning" thread; refcount updates from the owner are non-atomic, others use atomic operations.</li>
+<li><strong>Deferred reference counting</strong> for objects on the interpreter's internal stack.</li>
+<li><strong>Per-type locks</strong> around mutations of built-in containers.</li>
+</ul>
+<p>In the transitional period (3.13/3.14), most pure-Python code will "just work" but you will pay a ~10% single-threaded overhead. C extensions need to opt in to free-threading and may require audits. For CPU-bound analytic code this is a game-changer; for I/O or glue code, asyncio/threads are usually already fine.</p>
+
+<h3>Subinterpreters (PEP 684)</h3>
+<p>Since 3.12, you can run multiple interpreters in a single process, each with its own GIL. They share OS resources but don't share Python-level state, and cross-interpreter communication goes through queues and channels. The most immediate benefit: <code>multiprocessing</code>-style parallelism without the fork/spawn cost. The catch today is C extension compatibility — many extensions assume a single interpreter and will crash if loaded in multiple.</p>
+
+<div class="callout warn">
+<div class="label">Pitfall</div>
+"The GIL means Python can't do parallelism" is wrong. The correct version is: "CPython's GIL prevents Python <em>bytecode</em> from executing in parallel within one interpreter. C extensions routinely release the GIL for their compute, which is why NumPy, SciPy, hashlib, and zlib all see real speedups with threads. And with 3.13's free-threaded build or subinterpreters, even pure Python can scale across cores."
+</div>
+
+<div class="qa">
+<p class="q">Walk me through exactly what the GIL is and why it exists.</p>
+<p class="a">The GIL is a mutex in the CPython runtime that is held whenever a thread is executing Python bytecode. It exists because CPython's memory model is reference-counted, and making every <code>Py_INCREF</code> and <code>Py_DECREF</code> atomic would add a measurable tax on every single pointer operation. The GIL sidesteps that by serializing bytecode execution so refcount updates are implicitly safe. A thread holds the GIL until either it blocks on I/O, it calls a C function that explicitly releases it, or it hits the switch interval — 5 ms by default. The tradeoff is that two CPU-bound Python threads do not run in parallel on two cores in the default build.</p>
+</div>
+
+<div class="qa">
+<p class="q">When would you use threads vs asyncio vs multiprocessing?</p>
+<p class="a">Short version: threads for blocking I/O and C libraries that release the GIL; asyncio for high-concurrency network code where you want tens of thousands of concurrent tasks with low per-task overhead; multiprocessing for CPU-bound Python code that can't be vectorized into NumPy or moved into a C extension. Longer version: threads have lower per-task overhead than processes but don't help with CPU-bound Python; asyncio has the lowest per-task overhead but poisons the whole codebase with <code>async</code> coloring and dies the moment something blocks the loop; multiprocessing actually parallelizes CPU work but pays pickling and startup costs. If you're reaching for multiprocessing for numeric work, also ask whether NumPy, Cython, or numba solves the problem without leaving one process.</p>
+</div>
+
+<div class="qa">
+<p class="q">I want to share a large NumPy array across worker processes without copying. How?</p>
+<p class="a">Three common options. First, if you're on Linux with <code>fork</code> start method, the child inherits the parent's pages copy-on-write — as long as nothing writes, there's no copy. This is fragile because any attribute access on a Python object bumps its refcount, which does a write. Second, <code>multiprocessing.shared_memory.SharedMemory</code> gives you a named shared buffer you can back a NumPy array by, with explicit lifetime management. Third, memory-map a file with <code>numpy.memmap</code> — this also works across unrelated processes and is what a lot of research pipelines use for tick data. For true zero-copy between Python processes, shared_memory + ndarray is the cleanest modern answer.</p>
+</div>
+
+<div class="qa">
+<p class="q">My asyncio server's latency spikes periodically. What would you investigate first?</p>
+<p class="a">Three usual suspects. First, something is blocking the event loop — a synchronous library call, a heavy <code>json.loads</code>, or CPU work inside a coroutine. I'd enable <code>loop.set_debug(True)</code> and <code>PYTHONASYNCIODEBUG=1</code>, which logs callbacks that exceed the configured threshold, and run py-spy with <code>--idle</code> to see where time is going. Second, GC pauses on a large heap — check <code>gc.callbacks</code>, or disable and manually invoke GC at safe points. Third, the scheduling interval on upstream threads or the switch interval itself; if there's cross-thread work, the GIL handoff adds jitter. I'd rule out the loop-blocking case first because it's by far the most common.</p>
+</div>
+
+<div class="qa">
+<p class="q">Is <code>dict[k] += 1</code> thread-safe in CPython?</p>
+<p class="a">No. It compiles to a load, an add, and a store, and the GIL can be released between them on the switch interval. Two threads racing will lose updates. The canonical fixes are a lock around the increment, or a <code>collections.Counter</code> whose individual updates are each single operations under a lock you hold, or atomic counters from <code>itertools.count</code> if you just need unique integers. Even <code>list.append</code>, which is atomic at the bytecode level, is only safe for the single append — read-then-append sequences are not.</p>
+</div>
+</section>
+<section id="generators">
+<h2>6. Generators, Coroutines, and asyncio Internals</h2>
+<p>Generators are the hinge around which Python's concurrency story turns. Everything from list comprehensions to asyncio to the iteration protocol is built on the same piece of machinery: a frame you can suspend and resume. Interviewers love this area because the layers are clean and the terminology trips people up.</p>
+
+<h3>Iterators, generators, generator expressions</h3>
+<p>Iteration in Python is a protocol: an iterable has <code>__iter__</code> that returns an iterator; an iterator has <code>__next__</code> that returns the next value or raises <code>StopIteration</code>. <code>for x in xs:</code> is sugar for <code>it = iter(xs); while True: try: x = next(it); ... except StopIteration: break</code>.</p>
+<p>A generator function (one containing <code>yield</code>) returns a generator object the first time it's called. The generator object implements both <code>__iter__</code> (returns itself) and <code>__next__</code>. Each <code>next()</code> resumes the function's frame from the last <code>yield</code>, runs until the next <code>yield</code> or return, and either produces a value or raises <code>StopIteration</code>. Local state, the instruction pointer, and the call stack of the generator are all preserved in a frame object on the heap.</p>
+<pre><code class="language-python">def fib():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+
+it = fib()
+next(it); next(it); next(it)   # 0, 1, 1
+</code></pre>
+
+<p>A <strong>generator expression</strong> — <code>(x * x for x in xs)</code> — is syntactic sugar for an anonymous generator function. It's lazy, doesn't materialize an intermediate list, and composes well with <code>sum</code>, <code>any</code>, <code>all</code>, <code>max</code>, <code>min</code>. Prefer it to list comprehension when the result is consumed once.</p>
+
+<h3><code>yield</code>, <code>send</code>, <code>throw</code>, <code>close</code></h3>
+<p>Generators are two-way: values flow out on <code>yield</code>, and values flow back in on <code>send</code>.</p>
+<pre><code class="language-python">def echo():
+    received = None
+    while True:
+        received = yield received       # yields `received`, waits for next send()
+        print("got", received)
+
+g = echo()
+next(g)             # prime: advance to the first yield
+g.send("hello")     # prints "got hello", yields "hello"
+g.throw(ValueError) # inject an exception at the paused yield
+g.close()           # raise GeneratorExit at the yield, expected to return
+</code></pre>
+
+<div class="callout warn">
+<div class="label">Priming gotcha</div>
+You must advance a generator to its first <code>yield</code> before you can <code>send</code> a value — a brand-new generator is paused <em>before</em> the first instruction, not at the first yield. Calling <code>send(None)</code> or <code>next()</code> once is the usual pattern. This bites everyone at least once.
+</div>
+
+<h3><code>yield from</code> — delegation and the ladder to async</h3>
+<p><code>yield from iter</code> is sugar for "yield every value from iter, forwarding sends and throws as if the caller were talking directly to the inner generator, and return the inner generator's <code>StopIteration.value</code>." It collapses what would otherwise be a manual proxying loop.</p>
+<pre><code class="language-python">def chain(*iterables):
+    for it in iterables:
+        yield from it
+
+list(chain([1,2], (3,4), "ab"))   # [1, 2, 3, 4, 'a', 'b']
+</code></pre>
+<p>Historically, before native coroutines, <code>yield from</code> was how asyncio composed coroutines. You can still use generator-based coroutines with <code>@asyncio.coroutine</code>, but they're deprecated — prefer <code>async def</code> everywhere.</p>
+
+<h3>Native coroutines: <code>async def</code>, <code>await</code></h3>
+<p>A coroutine is a generator at the VM level with two differences:</p>
+<ol>
+<li>The function is marked with <code>CO_COROUTINE</code> so you can only drive it with <code>await</code>, not plain <code>next()</code>.</li>
+<li><code>await expr</code> requires <code>expr</code> to be <em>awaitable</em> — either another coroutine, a <code>Future</code>/<code>Task</code>, or any object with <code>__await__</code>.</li>
+</ol>
+<p>Under the hood, <code>await</code> is effectively <code>yield from expr.__await__()</code> plus a marker. A <code>Future</code>'s <code>__await__</code> yields <code>self</code> once and then returns the result, which is how the event loop gets a handle to the task and wakes it when ready.</p>
+
+<pre><code class="language-python">import asyncio
+
+async def worker(name, delay):
+    await asyncio.sleep(delay)
+    return name
+
+async def main():
+    async with asyncio.TaskGroup() as tg:         # structured concurrency
+        a = tg.create_task(worker("A", 0.1))
+        b = tg.create_task(worker("B", 0.2))
+    return a.result(), b.result()
+
+asyncio.run(main())
+</code></pre>
+
+<h3>Event loop anatomy</h3>
+<p>The asyncio event loop is roughly:</p>
+<ol>
+<li>A deque of <em>ready</em> callbacks and a heap of <em>scheduled</em> callbacks (keyed by monotonic time).</li>
+<li>A selector (wrapping <code>epoll</code>/<code>kqueue</code>/IOCP) that knows about file descriptors of interest.</li>
+<li>A main loop: drain the ready queue, call selector with a timeout equal to "time until next scheduled callback," dispatch any FD events into the ready queue, move scheduled callbacks whose time has come into the ready queue, repeat.</li>
+</ol>
+<p>A <strong>Task</strong> is a <code>Future</code> that wraps a coroutine. When you call <code>create_task</code>, the loop schedules <code>task.__step</code> — which calls <code>send(None)</code> on the coroutine. The coroutine runs until it <code>await</code>s something. Whatever it yielded out is captured as the Task's "currently waiting on" Future; the Task installs a done-callback on that Future that re-schedules <code>__step</code>, then control returns to the loop. The cycle continues until the coroutine returns (setting the Task's result) or raises (setting its exception).</p>
+
+<h3>Async iteration and async context managers</h3>
+<pre><code class="language-python">async def stream():
+    for i in range(5):
+        await asyncio.sleep(0)
+        yield i       # this is an async generator — async def + yield
+
+async def consume():
+    async for x in stream():
+        print(x)
+
+class AsyncLock:
+    async def __aenter__(self):
+        # acquire asynchronously
+        return self
+    async def __aexit__(self, exc_type, exc, tb):
+        # release
+        return False
+
+async def use():
+    async with AsyncLock() as l:
+        ...
+</code></pre>
+
+<h3>Structured concurrency with <code>TaskGroup</code></h3>
+<p>Before 3.11 you'd use <code>asyncio.gather</code> — which has a famous bug: if one task fails, the others keep running, and their exceptions can be silently swallowed. <code>TaskGroup</code> fixes this: if any task raises, all siblings are cancelled, and the whole group re-raises an <code>ExceptionGroup</code>. This is the idiomatic modern pattern and worth pattern-matching in interview answers.</p>
+<pre><code class="language-python">async def fetch_all(urls):
+    async with asyncio.TaskGroup() as tg:
+        tasks = [tg.create_task(http.get(u)) for u in urls]
+    return [t.result() for t in tasks]   # all finished, any failure cancels the rest
+</code></pre>
+
+<h3>Cancellation — the one thing everyone gets wrong</h3>
+<p>Cancelling a task injects a <code>CancelledError</code> at the next <code>await</code> point. If you catch <code>Exception</code> in a task, you will accidentally swallow <code>CancelledError</code> and the cancel will fail silently. Since 3.8, <code>CancelledError</code> inherits from <code>BaseException</code>, not <code>Exception</code>, which helps — but any broad <code>except BaseException</code> or explicit <code>except CancelledError: pass</code> re-introduces the bug. Rule of thumb: in task bodies, <em>only catch specific exceptions, or re-raise cancellation explicitly</em>.</p>
+
+<div class="callout tip">
+<div class="label">Talking point</div>
+"Native coroutines are generator frames with a different marker bit. <code>await</code> is the moral equivalent of <code>yield from</code>. The event loop is a selector plus a ready queue. That's the whole story — everything else is API."
+</div>
+
+<div class="qa">
+<p class="q">Why does <code>await</code> need an <code>async def</code> function?</p>
+<p class="a">Because <code>await</code> is compiled into bytecode that only makes sense inside a coroutine frame. The <code>async def</code> keyword sets the <code>CO_COROUTINE</code> flag on the compiled code object, which both tells the runtime this function must be driven by <code>send</code>/event loop rather than called directly, and enables the <code>GET_AWAITABLE</code> / <code>YIELD_FROM</code>-like bytecode sequences that <code>await</code> emits. You literally can't emit the right bytecode outside an <code>async def</code>.</p>
+</div>
+
+<div class="qa">
+<p class="q">What's the difference between a coroutine, a task, and a future?</p>
+<p class="a">A <strong>coroutine</strong> is the raw resumable object returned by calling an <code>async def</code> function — it's inert until something drives it. A <strong>Future</strong> is a low-level placeholder for a result that will be available later; it has <code>set_result</code>/<code>set_exception</code>/<code>add_done_callback</code> and is what the event loop uses as its scheduling primitive. A <strong>Task</strong> is a <code>Future</code> subclass that wraps a coroutine and drives it on the event loop: creating a Task schedules the coroutine for execution, and the Task becomes the handle you wait on. You <code>await</code> a Task or Future to get its eventual result; you create a Task to start concurrent work.</p>
+</div>
+
+<div class="qa">
+<p class="q">Will a generator's <code>finally</code> block always run?</p>
+<p class="a">Almost always — <code>close()</code> on a generator raises <code>GeneratorExit</code> at the paused yield, which will propagate through any <code>finally</code> blocks before the generator exits. And the cycle collector calls <code>close()</code> on generators as part of cleanup, so even an abandoned generator eventually runs its finally. The exception is if the interpreter is shutting down — built-in modules can be torn down before your finally runs, which is why you sometimes see "NoneType has no attribute X" from a finally during shutdown. For critical cleanup, use a context manager instead.</p>
+</div>
+
+<div class="qa">
+<p class="q">What happens if I call <code>time.sleep(1)</code> inside an async function?</p>
+<p class="a">You block the entire event loop for a full second. <code>time.sleep</code> is a synchronous C call — it doesn't release the loop, so every other task in this event loop is frozen until it returns. The fix is <code>await asyncio.sleep(1)</code>, which yields to the loop and reschedules the coroutine after one second. For unavoidable blocking calls (e.g., a legacy sync library), wrap them with <code>await loop.run_in_executor(None, blocking_call, args)</code> so they run in a thread pool and the loop stays responsive.</p>
+</div>
+
+<div class="qa">
+<p class="q">Compare <code>asyncio.gather</code> and <code>asyncio.TaskGroup</code>.</p>
+<p class="a">Both run coroutines concurrently. The difference is failure semantics. <code>gather</code> returns a list of results (or exceptions if <code>return_exceptions=True</code>); if one task raises, the others keep running and you have to manually cancel them. Worse, exceptions in other tasks can be silently lost if nothing awaits them. <code>TaskGroup</code> implements structured concurrency: on the first failure, all sibling tasks are cancelled, and the group raises an <code>ExceptionGroup</code> containing everything that went wrong. It's the correct default for new code in 3.11+. Reach for <code>gather</code> only when you explicitly want fire-and-forget best-effort semantics.</p>
+</div>
+</section>
+<section id="functions">
+<h2>7. Functions, Closures, Decorators, Context Managers</h2>
+<p>Functions are objects with a compiled code object, a globals reference, default values, and — if they close over outer scopes — a tuple of cells. Most "what does this print?" interview questions live in the space between these parts.</p>
+
+<h3>Function anatomy</h3>
+<pre><code class="language-python">def f(a, b=10, *args, key=None, **kwargs):
+    return a + b
+
+f.__code__             # compiled code object, immutable
+f.__defaults__         # (10,)   positional defaults
+f.__kwdefaults__       # {'key': None}   keyword-only defaults
+f.__closure__          # None — no closure here
+f.__globals__          # dict of the defining module
+f.__name__             # 'f'
+f.__qualname__         # 'f' or e.g. 'Outer.method' for nested
+f.__dict__             # mutable per-function state — yes, functions have their own dict
+</code></pre>
+
+<h3>Closures and cell objects</h3>
+<p>When a nested function references a name from an enclosing scope, the compiler allocates a <strong>cell</strong> for that name in the outer frame and puts a reference into the nested function's <code>__closure__</code> tuple. Both frames point at the same cell, which is how <code>nonlocal</code> rebinding works.</p>
+<pre><code class="language-python">def make_accumulator():
+    total = 0
+    def add(x):
+        nonlocal total
+        total += x
+        return total
+    return add
+
+acc = make_accumulator()
+acc.__closure__[0].cell_contents   # 0, then updates as you call acc()
+</code></pre>
+
+<div class="callout warn">
+<div class="label">The late-binding closure trap</div>
+<pre><code class="language-python">fs = [lambda: i for i in range(3)]
+[f() for f in fs]   # [2, 2, 2] — all cells point at the same `i`, now equal to 2
+</code></pre>
+<p>The fix is either a default-argument trick (<code>lambda i=i: i</code>, which captures at definition time) or a factory function. This is the single most frequently-asked interview gotcha on closures — be ready.</p>
+</div>
+
+<h3>Decorators — the full vocabulary</h3>
+<p>A decorator is just <code>func = decorator(func)</code>. Any callable qualifies. The patterns you must be fluent in:</p>
+
+<h4>Plain function decorator</h4>
+<pre><code class="language-python">from functools import wraps
+
+def log(fn):
+    @wraps(fn)                      # preserves __name__, __doc__, __wrapped__
+    def inner(*args, **kwargs):
+        print(f"call {fn.__name__}")
+        return fn(*args, **kwargs)
+    return inner
+
+@log
+def greet(name): return f"hi {name}"
+</code></pre>
+
+<h4>Decorator with arguments</h4>
+<pre><code class="language-python">def retry(times):
+    def decorator(fn):
+        @wraps(fn)
+        def inner(*args, **kwargs):
+            last = None
+            for _ in range(times):
+                try: return fn(*args, **kwargs)
+                except Exception as e: last = e
+            raise last
+        return inner
+    return decorator
+
+@retry(times=3)
+def flaky(): ...
+</code></pre>
+
+<h4>Class decorators and decorator classes</h4>
+<pre><code class="language-python">class CountCalls:
+    def __init__(self, fn):
+        self.fn = fn; self.n = 0
+    def __call__(self, *a, **kw):
+        self.n += 1
+        return self.fn(*a, **kw)
+
+@CountCalls
+def work(): ...
+</code></pre>
+<p>Class decorators (decorators <em>applied</em> to classes, not decorator classes) are how <code>@dataclass</code> and <code>@total_ordering</code> work: they inspect the class, synthesize methods, and return the (possibly modified) class.</p>
+
+<h4>Stacking</h4>
+<p><code>@a @b @c def f(): ...</code> is equivalent to <code>f = a(b(c(f)))</code>. The bottom-most decorator runs first. Order matters when decorators log, cache, or register — a caching decorator above a logging decorator will make logs disappear on cache hits.</p>
+
+<h3>Built-in decorators you should know cold</h3>
+<table>
+<tr><th>Decorator</th><th>Use</th></tr>
+<tr><td><code>@property</code></td><td>Computed read-only attribute; add <code>@x.setter</code> to make writable</td></tr>
+<tr><td><code>@classmethod</code></td><td>Method receiving the class rather than an instance — alternate constructors</td></tr>
+<tr><td><code>@staticmethod</code></td><td>Method that doesn't receive <code>self</code> or <code>cls</code> — namespacing</td></tr>
+<tr><td><code>@functools.lru_cache(maxsize=...)</code></td><td>Memoize by argument hash; LRU eviction</td></tr>
+<tr><td><code>@functools.cache</code></td><td>Unbounded memoization (3.9+)</td></tr>
+<tr><td><code>@functools.cached_property</code></td><td>Lazy computed attribute cached on the instance (needs <code>__dict__</code>, so not with <code>__slots__</code> unless you opt in)</td></tr>
+<tr><td><code>@functools.singledispatch</code></td><td>Type-dispatched overloading on the first argument</td></tr>
+<tr><td><code>@functools.total_ordering</code></td><td>Fill in comparison methods given <code>__eq__</code> and one of <code>__lt__</code> etc.</td></tr>
+<tr><td><code>@dataclass</code></td><td>Auto-generates <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code>, etc. Supports <code>slots=True</code>, <code>frozen=True</code>, <code>kw_only=True</code></td></tr>
+<tr><td><code>@contextlib.contextmanager</code></td><td>Write a context manager as a generator with one <code>yield</code></td></tr>
+</table>
+
+<h3>Context managers</h3>
+<p><code>with</code> is defined by <code>__enter__</code> and <code>__exit__</code>. The <code>__exit__(exc_type, exc, tb)</code> return value is meaningful: returning a truthy value <strong>suppresses the exception</strong>. Don't do this unless you really mean to.</p>
+<pre><code class="language-python">class Timer:
+    def __enter__(self):
+        from time import perf_counter
+        self.t0 = perf_counter()
+        return self
+    def __exit__(self, *exc):
+        self.elapsed = perf_counter() - self.t0
+        return False   # do not swallow exceptions
+</code></pre>
+
+<p>The generator-based shortcut:</p>
+<pre><code class="language-python">from contextlib import contextmanager
+
+@contextmanager
+def temp_switch_interval(ns):
+    import sys
+    old = sys.getswitchinterval()
+    sys.setswitchinterval(ns)
+    try:
+        yield
+    finally:
+        sys.setswitchinterval(old)
+</code></pre>
+
+<p>Other pieces of <code>contextlib</code> worth knowing:</p>
+<ul>
+<li><code>ExitStack</code> — dynamic, unknown-at-write-time stacking of context managers. Essential for composing many resources.</li>
+<li><code>suppress(Exception)</code> — local try/except/pass as a context manager.</li>
+<li><code>closing(obj)</code> — adapt anything with a <code>close()</code> into a context manager.</li>
+<li><code>nullcontext()</code> — no-op CM, useful as a conditional fallback.</li>
+<li><code>AsyncExitStack</code>, <code>asynccontextmanager</code> — the async equivalents.</li>
+</ul>
+
+<div class="qa">
+<p class="q">What does <code>@wraps</code> do and why does it matter?</p>
+<p class="a"><code>functools.wraps</code> copies <code>__name__</code>, <code>__doc__</code>, <code>__module__</code>, <code>__qualname__</code>, <code>__dict__</code>, and <code>__wrapped__</code> from the wrapped function onto the wrapper. Without it, every decorated function claims to be called <code>inner</code> and has no docstring, which breaks introspection, logging, debuggers, and documentation generators. It also sets <code>__wrapped__</code>, which lets <code>inspect.signature</code> follow through decorators to the original signature. It's not optional — treat it as part of the decorator boilerplate.</p>
+</div>
+
+<div class="qa">
+<p class="q">How would you implement <code>@lru_cache(maxsize=N)</code> from scratch?</p>
+<p class="a">Two classic implementations. First: <code>OrderedDict</code> keyed on the tuple <code>(args, frozenset(kwargs.items()))</code> — on hit, <code>move_to_end</code>; on miss, call and insert, evicting with <code>popitem(last=False)</code> if over capacity. Second: a dict plus a doubly linked list of nodes. Dict maps key to node; the list tracks recency; on access, unlink and push to the head; on eviction, pop the tail. Both are O(1) per op. The stdlib implementation is the second pattern, written in C for speed. Worth mentioning: the key must be hashable, and the cache holds strong references — so caching methods keeps the whole instance alive, which is why people reach for <code>cached_property</code> or <code>weakref.WeakValueDictionary</code> instead.</p>
+</div>
+
+<div class="qa">
+<p class="q">Why does <code>@property</code> make an attribute un-shadowable by an instance assignment, while a plain method is shadowable?</p>
+<p class="a">Because <code>property</code> is a <em>data descriptor</em> (it defines <code>__set__</code>) and plain functions are <em>non-data descriptors</em> (only <code>__get__</code>). The attribute lookup algorithm gives data descriptors priority over instance dicts, so <code>obj.price</code> always calls the property getter even if you assigned <code>obj.price = 5</code>; in fact, that assignment calls the property's <code>__set__</code>, which raises if there's no setter. For a plain method, the lookup finds a non-data descriptor after checking the instance dict, so assigning a function to the instance dict shadows the class method.</p>
+</div>
+</section>
+<section id="typing">
+<h2>8. Typing, Dataclasses, and Modern Declarative Python</h2>
+<p>Python's type system is gradual: annotations are optional, erased at runtime (mostly), and verified by an external tool like mypy or pyright. Modern quant Python is heavily typed because it's the cheapest way to catch bugs in a dynamic language — expect interviewers to probe how well you use the type system, not whether you use it.</p>
+
+<h3>The big picture</h3>
+<ul>
+<li>Annotations are stored in <code>f.__annotations__</code> (or <code>cls.__annotations__</code>). They're evaluated at function/class definition time by default — this is why forward references need strings or <code>from __future__ import annotations</code>.</li>
+<li>The type system distinguishes <strong>nominal</strong> (inheritance-based) from <strong>structural</strong> (protocol-based) subtyping. <code>Protocol</code> classes are the Python answer to duck typing with teeth.</li>
+<li>Covariance, contravariance, and invariance matter: <code>list[Dog]</code> is <em>not</em> a <code>list[Animal]</code> (invariant), but <code>Sequence[Dog]</code> is a <code>Sequence[Animal]</code> (covariant because read-only).</li>
+<li>Runtime enforcement is opt-in (<code>pydantic</code>, <code>attrs</code> with validators, <code>typeguard</code>). The annotations themselves don't check anything.</li>
+</ul>
+
+<h3>Essential constructs</h3>
+<pre><code class="language-python">from typing import (
+    Any, Callable, ClassVar, Final, Literal, Iterator, Iterable, Mapping,
+    Protocol, Sequence, TypeAlias, TypeVar, TypedDict, cast, overload,
+)
+
+T = TypeVar("T")
+Num = TypeVar("Num", int, float)      # constrained to int or float
+
+def first(xs: Sequence[T]) -> T: ...
+
+Price: TypeAlias = float
+Side = Literal["buy", "sell"]
+
+class HasPrice(Protocol):
+    price: float
+
+def total(items: Iterable[HasPrice]) -> float:
+    return sum(i.price for i in items)
+</code></pre>
+
+<h4>Generics (PEP 695, 3.12+)</h4>
+<p>Modern syntax removes the <code>TypeVar</code> ceremony for most cases:</p>
+<pre><code class="language-python">def first[T](xs: Sequence[T]) -> T: ...
+
+class Cache[K, V]:
+    def get(self, k: K) -> V | None: ...
+    def put(self, k: K, v: V) -> None: ...
+</code></pre>
+
+<h4>Union, Optional, and the new <code>|</code> syntax</h4>
+<p><code>Optional[X]</code> is just <code>X | None</code>. Since 3.10, you can write union types with <code>|</code> directly: <code>def f(x: int | str) -> bool | None:</code>. Prefer the <code>|</code> syntax in new code.</p>
+
+<h4><code>Self</code>, <code>Final</code>, <code>ClassVar</code>, <code>Literal</code></h4>
+<pre><code class="language-python">from typing import Self, Final, ClassVar, Literal
+
+class Order:
+    MAX_QTY: ClassVar[int] = 10_000   # class-level, not per-instance
+    id: Final[str]                    # cannot be re-bound
+    side: Literal["buy", "sell"]
+
+    def with_qty(self, qty: int) -> Self:
+        ...                           # return type tracks subclasses
+</code></pre>
+
+<h4>TypedDict and structural records</h4>
+<p><code>TypedDict</code> lets you type the shape of a dict literal while keeping runtime behavior as a plain dict. Invaluable for JSON/config objects where you don't want to force the consumer to wrap things in a class.</p>
+<pre><code class="language-python">class TickDict(TypedDict):
+    ts: int
+    bid: float
+    ask: float
+    venue: str
+
+def mid(t: TickDict) -> float:
+    return 0.5 * (t["bid"] + t["ask"])
+</code></pre>
+
+<h3>Dataclasses — the workhorse</h3>
+<p><code>@dataclass</code> generates <code>__init__</code>, <code>__repr__</code>, <code>__eq__</code>, and optionally <code>__hash__</code>, <code>__lt__</code>, etc., from annotated fields. Modern options worth memorizing:</p>
+<pre><code class="language-python">from dataclasses import dataclass, field
+
+@dataclass(slots=True, frozen=True, kw_only=True)
+class Trade:
+    ts: int
+    side: Literal["buy", "sell"]
+    qty: int
+    px: float
+    meta: dict[str, str] = field(default_factory=dict)
+</code></pre>
+<ul>
+<li><code>slots=True</code> (3.10+): generate <code>__slots__</code> on the class — huge memory/attribute-access win.</li>
+<li><code>frozen=True</code>: raise on assignment, generate a <code>__hash__</code> so instances are usable as dict keys / set members.</li>
+<li><code>kw_only=True</code> (3.10+): all fields keyword-only — safer against argument reordering.</li>
+<li><code>field(default_factory=...)</code>: the safe way to give mutable defaults.</li>
+<li><code>field(init=False, repr=False, compare=False)</code>: fine-grained control for derived / metadata fields.</li>
+</ul>
+
+<p>Alternatives and when to pick them:</p>
+<table>
+<tr><th>Tool</th><th>When</th></tr>
+<tr><td><code>@dataclass</code></td><td>Default for internal record types — free with stdlib, good ergonomics</td></tr>
+<tr><td><code>NamedTuple</code></td><td>When you also want tuple iteration, indexing, and immutability; slightly lighter weight</td></tr>
+<tr><td><code>attrs</code></td><td>Much richer: validators, converters, slots always, hashable defaults handled correctly. Slightly faster init</td></tr>
+<tr><td><code>pydantic</code></td><td>When you need runtime validation/coercion from untrusted inputs (API payloads, configs)</td></tr>
+<tr><td><code>msgspec.Struct</code></td><td>When you need both validation and speed — roughly 10x faster than pydantic v2 for trivial structs</td></tr>
+</table>
+
+<h3>Type guards and narrowing</h3>
+<pre><code class="language-python">from typing import TypeGuard
+
+def is_str_list(xs: list[object]) -> TypeGuard[list[str]]:
+    return all(isinstance(x, str) for x in xs)
+
+def process(xs: list[object]):
+    if is_str_list(xs):
+        # inside the if, xs is typed as list[str]
+        return ",".join(xs)
+</code></pre>
+
+<div class="qa">
+<p class="q">How does <code>from __future__ import annotations</code> change things, and why would you use it?</p>
+<p class="a">It makes all annotations evaluated lazily as strings at class/function definition time rather than as real expressions. The upsides: forward references become free (you can reference a class before it's defined), circular imports become less fragile, and class-definition overhead drops. The downsides: anything that reads annotations at runtime (<code>pydantic</code>, <code>dataclasses</code> in some cases, <code>typing.get_type_hints</code>) has to resolve them with <code>get_type_hints</code>, which requires the referenced names to be importable. It was slated to become the default under PEP 563, but that was deferred; many codebases still turn it on explicitly and it's a good default for library code.</p>
+</div>
+
+<div class="qa">
+<p class="q">What's the difference between <code>Protocol</code> and a nominal ABC?</p>
+<p class="a">An <code>abc.ABC</code> requires explicit subclassing — a type has to inherit from it to be considered a subtype. A <code>Protocol</code> is structural: any object with the matching attributes and methods is accepted by the type checker, no inheritance needed. Protocols are Python's answer to duck typing in a type system — you can type "anything with a <code>price</code> attribute" without forcing downstream code to import and subclass your class. Protocols also support <code>@runtime_checkable</code> for <code>isinstance</code>, but that's slower and loses the structural-typing benefits for static checkers.</p>
+</div>
+
+<div class="qa">
+<p class="q">When would you reach for <code>pydantic</code> over <code>@dataclass</code>?</p>
+<p class="a">When the data crosses a trust boundary and you need validation and coercion. Config loading, API payloads, CLI argument parsing, message queue consumers — anywhere you don't control the upstream. <code>pydantic</code> will validate types, coerce when possible (string to datetime, int to float), run custom validators, and give you rich error messages. For internal record types where you just want a typed struct, <code>@dataclass(slots=True, frozen=True)</code> is cheaper at both runtime and cognitive load. In a latency-sensitive path, neither is ideal — <code>msgspec</code> gives you validation at C speeds.</p>
+</div>
+</section>
+<section id="stdlib">
+<h2>9. Standard Library Deep Cuts</h2>
+<p>The stdlib is where interviewers look to see whether you reach for library primitives or reinvent them. The modules below are the ones that come up repeatedly.</p>
+
+<h3><code>collections</code></h3>
+<table>
+<tr><th>Type</th><th>Big idea</th></tr>
+<tr><td><code>deque</code></td><td>O(1) append and popleft; bounded via <code>maxlen</code> (great for rolling windows); <strong>not</strong> indexable in O(1), so don't use as a list replacement</td></tr>
+<tr><td><code>Counter</code></td><td>Multiset; <code>most_common(k)</code> runs in O(n log k) with a heap; supports arithmetic (+, -, &amp;, |)</td></tr>
+<tr><td><code>defaultdict</code></td><td>Dict with a factory for missing keys; cleaner than <code>dict.setdefault</code> in loops</td></tr>
+<tr><td><code>OrderedDict</code></td><td>Still useful in 3.7+ for <code>move_to_end</code>, <code>popitem(last=False)</code>, and equality-by-order</td></tr>
+<tr><td><code>ChainMap</code></td><td>Layered scopes — config overrides, nested namespaces, <em>without</em> copying</td></tr>
+</table>
+
+<h3><code>heapq</code> and <code>bisect</code></h3>
+<pre><code class="language-python">import heapq, bisect
+
+heap = []
+heapq.heappush(heap, (priority, item))
+task = heapq.heappop(heap)               # smallest
+top3 = heapq.nlargest(3, iterable)       # O(n log k)
+
+# Sorted list + bisect: classic O(log n) insert-position, O(n) insert
+idx = bisect.bisect_left(sorted_keys, key)
+bisect.insort(sorted_keys, key)
+</code></pre>
+<p>Key interview tricks:</p>
+<ul>
+<li><code>heapq</code> is a min-heap. For a max-heap, push <code>-key</code> or <code>(-key, value)</code>.</li>
+<li>Two-heap pattern for running median: max-heap for the lower half, min-heap for the upper half.</li>
+<li><code>heapq.merge</code> is a lazy merge of k sorted iterables — linear in total elements, constant extra memory per stream.</li>
+<li><code>sortedcontainers.SortedList</code> is the go-to when you need ordered structure with O(log n) insert <em>and</em> indexing; pure Python, surprisingly fast thanks to a list-of-lists bucketing scheme.</li>
+</ul>
+
+<h3><code>itertools</code> and <code>functools</code></h3>
+<p>Things you should be able to pattern-match without stopping to think:</p>
+<ul>
+<li><code>itertools.chain</code>, <code>chain.from_iterable</code>, <code>islice</code>, <code>tee</code>, <code>groupby</code>, <code>accumulate</code>, <code>pairwise</code> (3.10+), <code>batched</code> (3.12+)</li>
+<li><code>itertools.product</code>, <code>permutations</code>, <code>combinations</code>, <code>combinations_with_replacement</code></li>
+<li><code>itertools.count</code>, <code>cycle</code>, <code>repeat</code> for infinite sources</li>
+<li><code>functools.reduce</code>, <code>partial</code>, <code>singledispatch</code>, <code>cache</code>, <code>lru_cache</code>, <code>cached_property</code>, <code>total_ordering</code>, <code>wraps</code></li>
+</ul>
+<pre><code class="language-python">from itertools import groupby, accumulate, pairwise
+from operator import itemgetter
+
+# groupby requires pre-sorted input
+for key, grp in groupby(sorted(events, key=itemgetter('ts')), key=itemgetter('symbol')):
+    ...
+
+prefix_sums = list(accumulate([1, 2, 3, 4]))    # [1, 3, 6, 10]
+moves = [(a, b) for a, b in pairwise([1, 3, 6, 10])]   # [(1,3),(3,6),(6,10)]
+</code></pre>
+
+<h3>Numerics you might skip</h3>
+<ul>
+<li><code>decimal.Decimal</code> — arbitrary-precision base-10 fixed-point; slow but exact. Use it for money <em>at the boundaries</em>, not in hot compute.</li>
+<li><code>fractions.Fraction</code> — exact rationals.</li>
+<li><code>math.fsum</code> — accurate summation without floating-point drift; useful when you're aggregating huge sequences.</li>
+<li><code>statistics</code> — correctness-focused, not speed; fine for offline, not for hot loops.</li>
+</ul>
+
+<h3>Binary data: <code>struct</code>, <code>array</code>, <code>memoryview</code></h3>
+<pre><code class="language-python">import struct, array
+
+# Pack/unpack binary records
+packed = struct.pack("&lt;qdd", ts, bid, ask)          # little-endian: int64, double, double
+ts, bid, ask = struct.unpack("&lt;qdd", packed)
+
+# Dense typed arrays (single type, contiguous in memory)
+prices = array.array('d', [100.1, 100.2, 100.3])    # 'd' = double
+mv = memoryview(prices)                             # zero-copy view for slicing
+</code></pre>
+<p>When you're parsing wire protocols or memory-mapped files, this trio is often faster than allocating Python-level objects — the parsing cost is lower and downstream code can feed the buffer to NumPy without copying.</p>
+
+<h3><code>contextlib</code></h3>
+<p>Covered in §7. Beyond <code>contextmanager</code>, remember <code>ExitStack</code> for composing unknown numbers of context managers, and <code>suppress</code>, <code>redirect_stdout</code>, <code>redirect_stderr</code> for quick tests and plumbing.</p>
+
+<h3>Debugging / introspection</h3>
+<table>
+<tr><th>Module</th><th>Use</th></tr>
+<tr><td><code>dis</code></td><td>Disassemble bytecode</td></tr>
+<tr><td><code>inspect</code></td><td>Signatures, source, module, stack frames, class hierarchy</td></tr>
+<tr><td><code>traceback</code></td><td>Format and walk tracebacks programmatically</td></tr>
+<tr><td><code>gc</code></td><td>Cycle collector control, object graph introspection</td></tr>
+<tr><td><code>tracemalloc</code></td><td>Track allocation sites and diff snapshots</td></tr>
+<tr><td><code>faulthandler</code></td><td>Dump Python traceback on segfault or signal — turn it on in production</td></tr>
+<tr><td><code>cProfile</code>, <code>pstats</code></td><td>Function-level profiling out of the box</td></tr>
+</table>
+
+<div class="qa">
+<p class="q">When should I use <code>deque</code> instead of a <code>list</code>?</p>
+<p class="a">Whenever you need fast inserts or pops from the left. <code>list.append</code> and <code>list.pop()</code> from the right are amortized O(1), but <code>list.pop(0)</code> and <code>list.insert(0, x)</code> are O(n) because every element shifts. <code>deque</code> is a doubly linked list of blocks, so both ends are O(1). Common uses: BFS frontiers, sliding windows (with <code>maxlen</code>), and producer-consumer queues between threads. You lose fast random indexing — <code>deque[k]</code> is O(n/block_size), so don't use it as a general list replacement.</p>
+</div>
+
+<div class="qa">
+<p class="q">What's the complexity of <code>Counter.most_common(k)</code>?</p>
+<p class="a">O(n log k) — it uses <code>heapq.nlargest</code> internally, maintaining a min-heap of size k across the n elements. If you call <code>most_common()</code> with no argument, it's O(n log n) because it sorts the whole thing. For top-k work on large streams, always pass the <code>k</code>.</p>
+</div>
+</section>
+<section id="gotchas">
+<h2>10. Gotchas and Antipatterns</h2>
+<p>Every one of these has been in an interview. Treat the list as a checklist: if you can't explain each in one sentence with the fix, spend extra time on it.</p>
+
+<h3>Mutable default arguments</h3>
+<pre><code class="language-python">def append(x, xs=[]):    # evaluated ONCE at def time — shared across calls
+    xs.append(x); return xs
+
+append(1); append(2)     # [1], [1, 2] — surprise!
+</code></pre>
+<p><strong>Fix:</strong> use <code>None</code> and create a fresh object inside: <code>def append(x, xs=None): xs = xs or []</code>. Why it happens: default values are evaluated at function-definition time and stored in <code>f.__defaults__</code>. Every call that doesn't supply the argument reuses the same object.</p>
+
+<h3>Late binding in closures</h3>
+<pre><code class="language-python">fs = [lambda: i for i in range(3)]     # all return 2
+</code></pre>
+<p>Cells bind names, not values. Fix: <code>lambda i=i: i</code> captures by default at definition, or use a factory: <code>[(lambda v: lambda: v)(i) for i in range(3)]</code>.</p>
+
+<h3>Integer identity at the cache boundary</h3>
+<pre><code class="language-python">a, b = 256, 256;  a is b    # True — cached
+a, b = 257, 257;  a is b    # possibly False
+</code></pre>
+<p>Don't use <code>is</code> for value comparison. <code>is</code> is for identity, singletons, and sentinels (<code>x is None</code>, <code>x is _missing</code>). The small-int cache is <code>[-5, 256]</code>, and string interning applies to identifier-like short strings.</p>
+
+<h3><code>bool</code> is an <code>int</code></h3>
+<pre><code class="language-python">isinstance(True, int)   # True
+True + True             # 2
+sum([True, False, True]) # 2 — which is occasionally useful
+</code></pre>
+<p>This is why <code>Counter({"a": True})</code> does not do what you might think, and why <code>1 == True</code> is <code>True</code>. Be careful when a function accepts "a number or a flag."</p>
+
+<h3>Tuples of mutables — <code>+=</code> weirdness</h3>
+<pre><code class="language-python">t = ([], [])
+t[0] += [1]          # TypeError: 'tuple' object does not support item assignment
+                     # ...but the list WAS extended
+t                    # ([1], [])
+</code></pre>
+<p>Why: <code>+=</code> on a list calls <code>__iadd__</code> which mutates in place and returns the same object, <em>then</em> the assignment to <code>t[0]</code> happens, which fails because tuples are immutable. Net effect: the list changed and the assignment raised. Don't use <code>+=</code> on mutable elements of immutable containers.</p>
+
+<h3>Dict mutation during iteration</h3>
+<p>Adding or removing keys while iterating raises <code>RuntimeError: dictionary changed size during iteration</code>. Materialize first: <code>for k in list(d): ...</code>.</p>
+
+<h3>Shadowing built-ins</h3>
+<p><code>list = [1, 2, 3]</code>, <code>dict = {"a": 1}</code>, <code>id = 5</code> — all legal, all silently shadow the built-in in the local scope. Linters catch most of these; don't disable them.</p>
+
+<h3>Overly broad except</h3>
+<pre><code class="language-python">try:
+    work()
+except:              # catches everything, including SystemExit and KeyboardInterrupt
+    pass
+</code></pre>
+<p>Use <code>except Exception:</code> at the absolute broadest. Better: catch the specific exceptions you expect. In asyncio, <code>except Exception</code> is the right ceiling because <code>CancelledError</code> is a <code>BaseException</code> — catching <code>Exception</code> won't accidentally swallow cancellation.</p>
+
+<h3>Mutable class attributes</h3>
+<pre><code class="language-python">class Bag:
+    items = []        # shared across ALL instances
+    def add(self, x): self.items.append(x)
+
+a, b = Bag(), Bag()
+a.add(1); b.items   # [1] — shared!
+</code></pre>
+<p>Fix in <code>__init__</code>, or use a dataclass with a <code>default_factory</code>.</p>
+
+<h3>Chained comparisons</h3>
+<p><code>0 &lt; x &lt; 10</code> is equivalent to <code>0 &lt; x and x &lt; 10</code>, which is almost always what you want. But <code>a &lt; b &lt; c == d</code> means <code>a &lt; b and b &lt; c and c == d</code> — read carefully in non-trivial cases.</p>
+
+<h3>Walrus operator scope</h3>
+<p><code>:=</code> binds in the enclosing scope, not the comprehension scope. This is deliberately useful, but surprising:</p>
+<pre><code class="language-python">[y := x * 2 for x in range(3)]
+y   # 4 — leaked out of the comprehension
+</code></pre>
+
+<h3>Circular imports</h3>
+<p>Circular imports fail at <em>attribute</em> access time, not import time. If <code>a.py</code> does <code>from b import X</code> and <code>b.py</code> does <code>from a import Y</code>, the first one to start importing will populate its own module object, the second import will find a half-initialized module and likely fail to find the attribute. Fixes: import inside the function that needs it (lazy), restructure so the dependency is one-way, or push the shared code into a third module.</p>
+
+<h3>Async pitfalls</h3>
+<ul>
+<li><strong>Forgetting to <code>await</code></strong> returns a coroutine object that never runs. 3.8+ warns about unawaited coroutines.</li>
+<li><strong>Blocking calls in coroutines</strong> — <code>time.sleep</code>, <code>requests.get</code>, file I/O on a spinning disk, heavy <code>json.loads</code> on large strings. All stall the loop.</li>
+<li><strong>Fire-and-forget tasks</strong> without keeping a reference — the task can be garbage-collected mid-execution. Always keep the <code>Task</code> object in scope, or use a <code>TaskGroup</code>.</li>
+<li><strong>Broad <code>except Exception</code></strong> inside tasks can swallow <code>CancelledError</code> in older versions; use structured concurrency and catch specifics.</li>
+</ul>
+
+<h3><code>__del__</code> and finalizer quirks</h3>
+<ul>
+<li>Runs at an unspecified time (or never, during interpreter shutdown).</li>
+<li>Exceptions are printed and swallowed — you will not see them in production unless you look.</li>
+<li>Can resurrect its own object by adding a strong reference somewhere.</li>
+<li>Historically blocked cycle collection when combined with cycles (fixed since 3.4, but still a code smell).</li>
+</ul>
+<p>Use <code>weakref.finalize</code> or a context manager instead.</p>
+
+<h3>Surprising equality and hashing</h3>
+<ul>
+<li>Overriding <code>__eq__</code> sets <code>__hash__</code> to <code>None</code> automatically — objects become unhashable unless you also define <code>__hash__</code>.</li>
+<li><code>NaN != NaN</code>, but <code>NaN in [NaN]</code> returns <code>True</code> because containers use identity for membership as a fast path.</li>
+<li><code>hash(-1)</code> is <code>-2</code> — <code>-1</code> is reserved to mean "error" in CPython.</li>
+</ul>
+</section>
+<section id="proscons">
+<h2>11. Pros and Cons of Python</h2>
+<p>Expect the meta-question: "Why do we even use Python here?" or "What would you say Python is bad at?" A good answer names tradeoffs precisely and connects them to the work.</p>
+
+<h3>Pros — why Python wins in quant and glue code</h3>
+<ul>
+<li><strong>Ergonomics and iteration speed.</strong> Dynamic typing plus REPL plus notebook tooling plus live reloading means research ideas move from whiteboard to prototype in minutes. This is almost a competitive advantage in research workflows — other languages force a compile-link-run loop that kills iteration.</li>
+<li><strong>Batteries included.</strong> Stdlib covers most plumbing you'd reach for a third-party library for in other languages: asyncio, multiprocessing, compression, hashing, sockets, argparse, logging, unittest, sqlite.</li>
+<li><strong>Ecosystem depth.</strong> NumPy, SciPy, Pandas, PyArrow, scikit-learn, PyTorch, JAX, polars, statsmodels, CVXPY. Nothing in any other language gets close for numeric and scientific work.</li>
+<li><strong>Great C FFI.</strong> <code>ctypes</code>, <code>cffi</code>, <code>Cython</code>, <code>pybind11</code>, <code>nanobind</code> — any performance-sensitive piece can live in C/C++/Rust with a thin Python wrapper. This is how Python punches above its weight: the hot path isn't Python.</li>
+<li><strong>Type hints have matured.</strong> Modern Python with mypy/pyright is close to a statically-typed language for the purposes of catching bugs in IDEs and CI, without losing the dynamism for research code.</li>
+<li><strong>Readability.</strong> It's not a meme — code reviews move faster in Python than in most languages, and a research scientist can read and modify a trading engineer's Python code (and vice versa).</li>
+<li><strong>Polyglot glue.</strong> Python talks to everything — C extensions, Rust via PyO3, Java via JPype, DBs, message queues, arbitrary command-line tools. This is the "glue language" argument, and at a firm with a C++ trading core, the gluing is the job.</li>
+</ul>
+
+<h3>Cons — where Python hurts</h3>
+<ul>
+<li><strong>Single-threaded CPU performance.</strong> The GIL plus interpretation overhead plus heap-allocated everything means naive Python is one to two orders of magnitude slower than C for compute. Mitigated by NumPy, Cython, numba, PyPy, and now free-threaded CPython — but it's a real limitation you have to plan around.</li>
+<li><strong>Memory overhead.</strong> Every object has a 16+ byte header plus alignment; lists are pointer arrays; dicts have load-factor slack. A list of ints uses 4x the memory of a C array. For millions of small records, <code>__slots__</code>, NumPy structured arrays, or <code>msgspec</code> are near-mandatory.</li>
+<li><strong>Startup time.</strong> Even trivial CLIs take 50-100 ms to start because of imports. For short-lived subprocesses or Lambda-style workloads, this dominates everything else. Workarounds: long-lived daemons, <code>PYTHONSTARTUP</code> warmup, Cython-compiled modules.</li>
+<li><strong>Packaging and deployment.</strong> Historically a mess. Has improved substantially with <code>pyproject.toml</code>, <code>pip</code>, <code>uv</code>, <code>pipx</code>, but still more friction than Go's single binary or Rust's <code>cargo</code>. Native dependencies (manylinux wheels) are still a source of pain.</li>
+<li><strong>Dynamic typing bites at scale.</strong> Without type hints and mypy in CI, large Python codebases drift into "works until it doesn't." Refactoring is slower than in a statically typed language because the compiler doesn't find all the call sites for you.</li>
+<li><strong>Mobile / embedded / browser.</strong> Not a serious story. Pyodide (WASM) is a research curiosity; mobile Python exists but isn't mainstream.</li>
+<li><strong>Version fragmentation and 2-to-3 scar tissue.</strong> Still occasionally bites when working with old libraries.</li>
+<li><strong>Async is colored.</strong> The <code>async</code>/sync split means you can't casually call a sync library from async code without thread pool offload, and can't call async code from sync code without running an event loop. This colors libraries too — there's a whole parallel ecosystem (<code>httpx</code>, <code>aiopg</code>, etc.).</li>
+</ul>
+
+<h3>The honest summary for a quant firm</h3>
+<p>Python wins because research-to-production latency is the dominant cost in alpha generation, and Python compresses that loop better than any alternative. Its CPU performance is worked around by pushing compute into C/NumPy/Cython or out of process; its packaging is managed with internal tooling; its GIL is routed around with async for I/O and subprocesses for parallelism. You accept the tradeoffs because the alternatives — C++ for research, Java for scripting — would slow iteration more than they'd speed execution.</p>
+
+<div class="callout tip">
+<div class="label">Interview one-liner</div>
+"Python is not fast, but it's fast enough to let smart people iterate on ideas cheaply, and the places it's slow have well-trodden escape hatches. In a latency-sensitive shop, you use it as glue around a C++ core, not as the core itself."
+</div>
+</section>
+<section id="bestpractices">
+<h2>12. Best Practices</h2>
+<p>Beyond "use type hints" and "run black": the practices a production Python codebase at a trading firm will expect you to reach for by default.</p>
+
+<h3>Project layout and packaging</h3>
+<ul>
+<li><strong><code>pyproject.toml</code> first.</strong> <code>setup.py</code> is legacy. A single <code>pyproject.toml</code> declares build system, metadata, dependencies, and tool configuration (ruff, mypy, pytest). It's the 2020s baseline.</li>
+<li><strong>Src layout.</strong> Put code under <code>src/your_package/</code> rather than at the repo root. Prevents accidental implicit imports and catches "works because I'm in the repo" bugs.</li>
+<li><strong>Lockfiles.</strong> Use <code>uv</code>, <code>poetry</code>, or <code>pip-tools</code> to lock exact transitive versions. Unlocked dependencies are a time bomb.</li>
+<li><strong>Pinned Python.</strong> Your tooling and runtime should agree on the interpreter version. Mismatches are a rich source of "works on my machine."</li>
+</ul>
+
+<h3>Typing and linting</h3>
+<ul>
+<li><strong>Type hints everywhere they buy something.</strong> Public APIs, dataclass fields, function signatures. Local variables usually don't need them — the checker infers.</li>
+<li><strong>Pyright or mypy in CI</strong>, configured strict-ish for new code. For legacy code, use <code>mypy --strict-optional</code> at a minimum.</li>
+<li><strong>ruff</strong> is the modern fast linter — replaces flake8, isort, pyupgrade, and a dozen others in a single tool. Configure it in <code>pyproject.toml</code>.</li>
+<li><strong>black</strong> or ruff-format for auto-formatting. No bikeshedding on style in PRs.</li>
+</ul>
+
+<h3>Testing</h3>
+<ul>
+<li><strong>pytest</strong> is the standard. Fixtures over setUp/tearDown. Parametrize ruthlessly.</li>
+<li><strong>hypothesis</strong> for property-based testing — surprisingly valuable for parsers, state machines, and anything mathematical.</li>
+<li><strong>pytest-benchmark</strong> for tracking performance regressions on critical functions.</li>
+<li><strong>Integration tests</strong> that exercise real dependencies (DBs, queues) are worth the extra runtime. Mocked tests catch the bugs you wrote and miss the ones you didn't.</li>
+<li>Keep unit tests fast (&lt;1 s per file) so people run them. If they're slow, they won't run them.</li>
+</ul>
+
+<h3>Error handling</h3>
+<ul>
+<li><strong>Catch narrowly.</strong> <code>except FileNotFoundError</code>, not <code>except Exception</code>. Re-raise with context using <code>raise X("...") from original</code>.</li>
+<li><strong>Don't use exceptions for control flow in hot paths.</strong> Raising costs several microseconds in 3.12.</li>
+<li><strong>Fail loud, fail early.</strong> Log the exception with traceback at the boundary (top-level request handler, task boundary), not in every function.</li>
+<li><strong>Use <code>logging</code>, not <code>print</code>.</strong> Configure once at program start; use module-level <code>logger = logging.getLogger(__name__)</code>. Structured logging (JSON with fields) is the default for production services.</li>
+</ul>
+
+<h3>Performance discipline</h3>
+<ul>
+<li><strong>Measure, don't guess.</strong> <code>cProfile</code> for function-level, <code>line_profiler</code> for per-line, <code>py-spy</code> for sampling a live production process without restarting it, <code>scalene</code> for memory + CPU together.</li>
+<li><strong>Profile before optimizing.</strong> The bottleneck is almost never where you think it is.</li>
+<li><strong>Benchmark with realistic data.</strong> A microbenchmark with 100 elements tells you nothing about behavior at 10 million.</li>
+<li><strong>Prefer data structures over cleverness.</strong> The right <code>set</code>, <code>dict</code>, or <code>deque</code> beats a clever algorithm on a suboptimal structure every time.</li>
+</ul>
+
+<h3>Concurrency hygiene</h3>
+<ul>
+<li><strong>Don't share mutable state across threads.</strong> Use queues.</li>
+<li><strong>Don't block the event loop.</strong> Offload sync work with <code>run_in_executor</code>.</li>
+<li><strong>Use structured concurrency.</strong> <code>TaskGroup</code> over <code>gather</code> whenever possible.</li>
+<li><strong>Set explicit timeouts</strong> on every external call. No exceptions.</li>
+</ul>
+
+<h3>Code that reviews well</h3>
+<ul>
+<li><strong>Functions do one thing.</strong> If you can't name it in a short phrase, split it.</li>
+<li><strong>Dataclasses for data.</strong> Don't pass bare dicts or tuples across module boundaries.</li>
+<li><strong>Immutable by default.</strong> Frozen dataclasses, tuples, <code>@cache</code> instead of stateful memoization.</li>
+<li><strong>Docstrings on anything public.</strong> At minimum, what it does and what the parameters mean.</li>
+<li><strong>No bare <code>pass</code> in <code>except</code>.</strong> Either handle it or don't catch it.</li>
+</ul>
+</section>
+<section id="perf">
+<h2>13. Performance and the Quant/HFT Lens</h2>
+<p>This is the section latency-focused interviewers care about most. A strong answer connects specific CPython behavior to concrete techniques, and — critically — knows when to leave Python entirely.</p>
+
+<h3>Why Python is slow (in terms you can defend)</h3>
+<ol>
+<li><strong>Interpretation overhead.</strong> Every bytecode operation goes through the <code>ceval</code> dispatch loop — a switch (or computed goto) over opcodes, with decoding and argument fetching. A single C-level addition becomes dozens of C instructions in the interpreter.</li>
+<li><strong>Dynamic dispatch.</strong> Every operation must look up a type, find a slot, and call through a pointer. Even with the 3.11+ specializing interpreter caching the lookup, the dispatch cost is non-zero.</li>
+<li><strong>Heap allocation per value.</strong> Every int, float, and intermediate result is a heap-allocated <code>PyObject</code>. The allocator is fast but not free — and pointer chasing through object headers trashes the CPU cache.</li>
+<li><strong>Boxing of numerics.</strong> <code>3.14</code> is not a register-resident double; it's an 8-byte object header plus a double, accessed through a pointer. A tight numerical loop spends most of its time in box/unbox, not in arithmetic.</li>
+<li><strong>The GIL.</strong> Covered in §5. Prevents scaling pure-Python compute across cores in the default build.</li>
+<li><strong>No ahead-of-time type specialization.</strong> The compiler can't assume <code>x</code> is an int, so it can't inline <code>int.__add__</code> or elide the typecheck. The 3.11+ specializing interpreter does this <em>at runtime</em>, but only within a single frame.</li>
+</ol>
+
+<h3>Where to get speed without leaving Python</h3>
+
+<h4>1. NumPy — the default answer</h4>
+<p>NumPy arrays are a contiguous block of homogeneous C values with a type descriptor. Operations on them dispatch to pre-compiled C loops that the interpreter calls once. A million additions becomes one C loop call instead of a million bytecode iterations. This is usually 100-1000x faster than the naive Python loop and is the single highest-leverage optimization available.</p>
+<pre><code class="language-python">import numpy as np
+
+# Python loop: ~500 ms for 1M elements
+py = [a * b for a, b in zip(xs, ys)]
+
+# NumPy: ~1 ms
+xs_np = np.asarray(xs);  ys_np = np.asarray(ys)
+np_result = xs_np * ys_np
+</code></pre>
+<p>Key NumPy performance ideas:</p>
+<ul>
+<li><strong>Vectorize.</strong> Replace loops with array operations. If you can't, you probably want <code>np.vectorize</code> (convenience, not speed) or Cython.</li>
+<li><strong>Broadcasting.</strong> Aligns shapes without materializing — <code>a[:, None] - b[None, :]</code> computes a distance matrix without a Python loop.</li>
+<li><strong>Views, not copies.</strong> Slicing returns a view; <code>arr.copy()</code> forces a copy. Fancy indexing (boolean or integer array) always copies.</li>
+<li><strong>Dtype discipline.</strong> Use <code>float32</code> when you don't need the precision — half the memory, often faster. Mixing dtypes triggers copies.</li>
+<li><strong>Avoid <code>object</code> arrays.</strong> They're NumPy in name only — just a boxed PyObject array with no speedup.</li>
+<li><strong>Use <code>np.einsum</code></strong> for contractions; it's surprisingly fast and expressive.</li>
+<li><strong>Pre-allocate outputs.</strong> <code>np.empty</code> + in-place ops (<code>out=</code> kwarg) save allocations in hot loops.</li>
+</ul>
+
+<h4>2. Pandas — with caveats</h4>
+<p>Pandas is a heavy abstraction on top of NumPy. For tabular work it's fantastic; for hot paths it's often surprisingly slow. Modern alternatives:</p>
+<ul>
+<li><strong>Polars</strong> — Rust-backed, columnar, lazy execution, multi-core. Often 5-30x faster than Pandas for real workloads, with a cleaner API. Increasingly the default for research pipelines.</li>
+<li><strong>PyArrow</strong> — the underlying columnar format. Zero-copy across process boundaries, great interop with Parquet.</li>
+<li><strong>DuckDB</strong> — embedded analytical database. Query Parquet or in-memory dataframes with SQL, very fast.</li>
+</ul>
+<p>If you're on Pandas, push work into vectorized ops, avoid <code>iterrows</code> and <code>apply</code>, use categorical dtypes for low-cardinality strings, and be aware of the new Arrow backend (<code>dtype_backend='pyarrow'</code>) which is significantly faster for string-heavy data.</p>
+
+<h4>3. Numba — JIT for numeric Python</h4>
+<pre><code class="language-python">from numba import njit
+
+@njit(cache=True)
+def ma(x, n):
+    out = np.empty_like(x)
+    s = 0.0
+    for i in range(len(x)):
+        s += x[i]
+        if i &gt;= n: s -= x[i - n]
+        out[i] = s / min(i + 1, n)
+    return out
+</code></pre>
+<p>Numba compiles annotated Python to LLVM at first call — typically matching C for numeric loops on NumPy arrays. Limitations: numeric Python subset only, no objects or dynamic features, startup tax on first call. Best for moderate-complexity numeric kernels you'd otherwise write in Cython.</p>
+
+<h4>4. Cython — if you need total control</h4>
+<p>Cython is Python-with-types compiled to C. It's the escape hatch when you need every cycle, can accept a build step, and are willing to read C backtraces. Patterns: <code>cdef</code> typed locals for speed, <code>cimport numpy</code> for direct array access, <code>with nogil:</code> blocks to release the GIL and run multithreaded numeric code.</p>
+
+<h4>5. C extensions via pybind11 / nanobind</h4>
+<p>When the kernel is already C++ (the common case at latency-sensitive firms), wrap it with pybind11 or nanobind. This is the production pattern at most large quant firms. Your Python code becomes a thin glue layer; the arithmetic happens in C++ with all the latency benefits.</p>
+
+<h4>6. mypyc and Cython pure-Python mode</h4>
+<p><code>mypyc</code> (from the mypy project) compiles type-annotated Python to C extensions directly — no separate syntax. It's a middle ground: small speedups with zero code changes if your types are accurate. Used in production by mypy itself, and some parts of the Dropbox codebase.</p>
+
+<h3>Low-latency Python patterns</h3>
+<p>When you're stuck writing Python in a latency-sensitive path, these patterns are worth internalizing:</p>
+<ul>
+<li><strong>Preallocate everything.</strong> Loops that grow lists or dicts in the hot path are slow. Allocate once, reuse.</li>
+<li><strong>Hoist attribute lookups.</strong> <code>append = list.append</code> inside a loop turns attribute access into a local variable read — measurably faster in tight loops.</li>
+<li><strong>Local variables beat globals.</strong> <code>LOAD_FAST</code> is faster than <code>LOAD_GLOBAL</code>. Make module-level functions parameters when you're calling them millions of times.</li>
+<li><strong>Avoid exceptions in the hot path.</strong> Use explicit checks or sentinels.</li>
+<li><strong>Use <code>__slots__</code> for frequently instantiated classes.</strong> Not free, but close.</li>
+<li><strong>Batch.</strong> One C call on 10,000 elements is much faster than 10,000 C calls on one element.</li>
+<li><strong>Avoid <code>isinstance</code> / <code>type()</code> checks</strong> in loops when possible — they're not free.</li>
+<li><strong>Disable GC</strong> in very tight phases if you can guarantee no cycles.</li>
+<li><strong>Use <code>array.array</code> or NumPy for homogeneous numeric storage</strong> instead of <code>list</code>.</li>
+<li><strong>Memoryviews and the buffer protocol</strong> give zero-copy slicing over bytes/ctypes/NumPy.</li>
+<li><strong>Warm up the specializing interpreter.</strong> The first few calls to a function are slower than subsequent ones because specialization hasn't kicked in. Warm up the hot functions at startup.</li>
+</ul>
+
+<pre><code class="language-python"># Example: hoist, localize, preallocate
+def process(ticks, out):
+    bid_get = ticks.__getitem__      # hoist
+    local_round = round              # localize the builtin
+    for i in range(len(ticks)):
+        out[i] = local_round(bid_get(i), 4)
+    return out
+</code></pre>
+
+<h3>Profiling toolkit</h3>
+<table>
+<tr><th>Tool</th><th>What it does</th><th>When to reach for it</th></tr>
+<tr><td><code>cProfile</code> + <code>snakeviz</code></td><td>Function-level timing</td><td>First pass — where is time going</td></tr>
+<tr><td><code>line_profiler</code> (<code>@profile</code>)</td><td>Per-line timing of a specific function</td><td>You know the function, you want the line</td></tr>
+<tr><td><code>py-spy</code></td><td>Sampling profiler attaching to a running process</td><td>Production diagnosis; no code changes</td></tr>
+<tr><td><code>scalene</code></td><td>CPU + memory + GPU, separates Python vs native</td><td>Holistic view of a workload</td></tr>
+<tr><td><code>memray</code></td><td>Allocation tracking, flame graphs, leak detection</td><td>Memory growth, OOMs</td></tr>
+<tr><td><code>tracemalloc</code></td><td>Stdlib allocation tracing</td><td>Minimal, zero-dependency memory debugging</td></tr>
+<tr><td><code>perf</code> + Python symbols</td><td>Full system profiling with CPU counters</td><td>You suspect cache, branch prediction, or page faults</td></tr>
+</table>
+
+<h3>Shared-memory NumPy — the quant standard pattern</h3>
+<pre><code class="language-python">from multiprocessing.shared_memory import SharedMemory
+import numpy as np
+
+# Producer
+shm = SharedMemory(create=True, size=arr.nbytes, name="ticks")
+view = np.ndarray(arr.shape, dtype=arr.dtype, buffer=shm.buf)
+view[:] = arr[:]
+
+# Consumer (in another process)
+shm = SharedMemory(name="ticks")
+view = np.ndarray((N,), dtype=np.float64, buffer=shm.buf)
+# work with view — zero copy across the process boundary
+</code></pre>
+<p>This is how a research pipeline can fan out a snapshot of tick data to many worker processes without IPC overhead. Common wrinkles: manage lifetime explicitly (the producer must not exit before consumers are done reading, or you need a ref-counting wrapper); naming conflicts on crash cleanup; Windows has different semantics.</p>
+
+<h3>PyPy vs CPython</h3>
+<p>PyPy is a separate implementation of Python with a tracing JIT. On pure-Python workloads it's typically 3-10x faster than CPython. Why it's not the universal answer: the C extension story is weaker (<code>cpyext</code> is a compatibility shim that's slower than native CPython C extensions), startup is slower, and memory usage is higher. It's the right answer for long-running pure-Python services with heavy computation; it's the wrong answer when you live on NumPy / Pandas / C extensions.</p>
+
+<div class="callout tip">
+<div class="label">Quant framing</div>
+Every real Python performance win eventually looks like "stop running Python in the hot path." NumPy does it by batching. Cython and pybind11 do it by generating C. Shared memory and PyArrow do it by removing serialization. Know which technique maps to which bottleneck, and measure before picking.
+</div>
+
+<div class="qa">
+<p class="q">Why is a NumPy <code>sum</code> so much faster than a Python <code>sum</code>?</p>
+<p class="a">Two reasons. First, the Python <code>sum</code> runs a bytecode loop over the sequence, performing a <code>BINARY_ADD</code> on each element — tens of interpreter instructions per value, plus a heap allocation for each intermediate result. Second, NumPy's <code>sum</code> dispatches once into a compiled C loop that walks a contiguous block of <code>float64</code> values in place, with tight CPU-level arithmetic and no boxing. On a million doubles, the difference is roughly 100-500x, depending on cache behavior. It's the canonical example of why vectorization matters: you're not just avoiding the bytecode, you're avoiding the entire object model.</p>
+</div>
+
+<div class="qa">
+<p class="q">How would you speed up a Python function that processes market ticks and is the bottleneck?</p>
+<p class="a">Profile first — <code>py-spy record</code> on a realistic run, then read the flame graph. Then, in order of effort: (1) see if the inner loop can be vectorized with NumPy; (2) check for avoidable allocations and hoist repeated attribute lookups; (3) <code>__slots__</code> on the hot data class; (4) if the logic doesn't vectorize cleanly, rewrite the kernel in numba or Cython; (5) if numba isn't enough, push the kernel into C++ via pybind11. At each step I'd rerun the profiler to confirm the change actually moved the needle. The biggest wins usually come from either removing a per-tick Python object or replacing a Python loop with a C loop, and the order of attempt is roughly increasing engineering cost.</p>
+</div>
+
+<div class="qa">
+<p class="q">How do you pass a large NumPy array to a worker process without copying it?</p>
+<p class="a">Use <code>multiprocessing.shared_memory.SharedMemory</code> in combination with <code>numpy.ndarray(shape, dtype, buffer=shm.buf)</code>. The producer allocates a named shared-memory block, wraps it in an ndarray, fills it, and passes the name to the worker. The worker opens the same block and wraps it in its own ndarray view — both processes are looking at the same bytes. Alternative for on-disk data: <code>numpy.memmap</code> over a file, which lets unrelated processes share via the filesystem page cache. Both avoid the pickle cost you'd otherwise pay on every <code>Queue.put</code>.</p>
+</div>
+
+<div class="qa">
+<p class="q">What's the difference between vectorization in NumPy and SIMD vectorization in a compiler?</p>
+<p class="a">They're related but not the same thing. NumPy vectorization means "replace a Python loop with a single C loop call" — the win comes from not running the interpreter, even if the underlying C loop is scalar. Compiler SIMD vectorization means "generate AVX or NEON instructions that process multiple values per cycle" — the win comes from wider CPU instructions. NumPy's C loops are often (but not always) SIMD-vectorized by the underlying BLAS implementation (OpenBLAS, MKL). When you hear "Python vectorization," it's almost always the first sense. When you hear about bypassing NumPy with Cython or numba, sometimes you get the second sense as a bonus from LLVM.</p>
+</div>
+</section>
+<section id="mixedqa">
+<h2>14. Mixed Interview Q&amp;A</h2>
+<p>A final pass of cross-cutting questions of the kind that show up mid-interview once rapport is established. Practice answering these out loud; aim for 60-90 seconds each, with a crisp headline followed by one layer of depth.</p>
+
+<h3>Internals &amp; model</h3>
+
+<div class="qa">
+<p class="q">What actually happens when I call <code>a.b.c</code> three times in a row?</p>
+<p class="a">Each lookup is an independent attribute-access algorithm. <code>a.b</code> looks up <code>b</code> on <code>type(a)</code> and its MRO checking for data descriptors first, then <code>a.__dict__</code>, then non-data descriptors, then <code>type(a).__getattr__</code>. The result is a new reference. <code>.c</code> then runs the same algorithm on that result. Each step can trigger arbitrary Python code (property getters, <code>__getattribute__</code> overrides, descriptor <code>__get__</code>) and bumps refcounts. In a hot loop, <code>x = a.b.c</code> is measurably slower than binding <code>bc = a.b.c</code> once and reusing <code>bc</code>.</p>
+</div>
+
+<div class="qa">
+<p class="q">Explain the difference between <code>is</code> and <code>==</code>.</p>
+<p class="a"><code>is</code> compares object identity — are these two names pointing at the exact same object in memory? It's a single C pointer comparison. <code>==</code> dispatches to <code>__eq__</code>, which can be arbitrary Python code comparing values. Use <code>is</code> only for singletons and sentinels: <code>None</code>, <code>True</code>, <code>False</code>, and custom <code>MISSING</code> markers. Using <code>is</code> for value comparison is a common bug that happens to work for small ints and interned strings and then fails in production on larger values.</p>
+</div>
+
+<div class="qa">
+<p class="q">Why is <code>dict</code> ordered since 3.7?</p>
+<p class="a">CPython switched to a "compact dict" representation in 3.6 as an implementation detail, and 3.7 elevated insertion-order preservation to a language guarantee. The layout is a dense array of entries in insertion order plus a sparse hash table of indices into that array. Benefits: lower memory (the sparse table holds int indices, not full entries), better cache locality on iteration, and — as a side effect — ordered iteration. The hash table still resolves collisions with open addressing and perturbs the probe sequence based on the upper bits of the hash.</p>
+</div>
+
+<div class="qa">
+<p class="q">How does CPython handle hash collisions in <code>dict</code>?</p>
+<p class="a">Open addressing with a perturbation-based probe sequence. When a slot collides, the probe function combines the hash and a counter to produce the next index, mixing in high-order hash bits to avoid clustering. The load factor is kept around 2/3 — when exceeded, the table is resized (typically doubling). Deletion marks slots as "dummy" rather than empty so later probes continue. This avoids the cluster-degradation you'd get with linear probing. For adversarial hash inputs, Python uses a randomized hash seed (per interpreter start, unless <code>PYTHONHASHSEED</code> is fixed) to prevent denial-of-service attacks via hash collisions.</p>
+</div>
+
+<div class="qa">
+<p class="q">What's a metaclass and when would you actually use one?</p>
+<p class="a">A metaclass is the class of a class. <code>type</code> is the default metaclass — it's the thing that runs when you execute <code>class Foo: ...</code>. By setting <code>metaclass=MyMeta</code>, you get hooks to customize class creation: <code>__new__</code> runs before the class body is fully built, <code>__init_subclass__</code> (often a simpler replacement) runs when any subclass is defined. Real uses: registering plugins at class-definition time, enforcing interface constraints, generating slots or methods from declarative class bodies, ORMs mapping attributes to columns. In modern Python, <code>__init_subclass__</code> and class decorators cover most of the use cases more cheaply, so reach for a full metaclass only when you genuinely need to intercept class construction itself.</p>
+</div>
+
+<h3>Concurrency &amp; performance</h3>
+
+<div class="qa">
+<p class="q">You're writing a market-data ingestor that has to handle ~1M messages per second. Where does Python fit, if at all?</p>
+<p class="a">Not in the hot path of the byte-level ingest. At 1M msg/s you have one microsecond per message, which is tighter than a Python function call. The realistic architecture is a C++ (or Rust) ingest loop that parses and dispatches, with Python sitting above it as the control plane, configuration, research interface, and slower-path analytics. You expose the C++ side via pybind11 / nanobind and share tick buffers via memory-mapped or shared-memory NumPy arrays so Python can read snapshots without serialization. Python then handles anything that can run at a few hundred Hz or lower: strategy research, parameter updates, logging aggregation, dashboards. The rule of thumb is "Python is where humans touch the system; C++ is where microseconds matter."</p>
+</div>
+
+<div class="qa">
+<p class="q">Walk me through how you'd run a simple CPU-bound task across 8 cores in Python.</p>
+<p class="a">First, I'd check if the task is vectorizable — if it's array math, NumPy already releases the GIL in most kernels, and thread pool + NumPy is a two-line solution with no process overhead. If it's pure Python, the standard answer is <code>concurrent.futures.ProcessPoolExecutor</code> with <code>max_workers=os.cpu_count()</code> and chunked inputs, using <code>spawn</code> as the start method for safety. I'd pay attention to the pickling cost of inputs and outputs, batching large-enough chunks to amortize the IPC and startup. For a 3.13 free-threaded build, or if the kernel is mostly NumPy with some Python glue, I'd just use a thread pool and measure. The anti-pattern is reaching for multiprocessing on a task that fits in one NumPy call.</p>
+</div>
+
+<div class="qa">
+<p class="q">What concurrency primitives does Python give you, and when do they differ from their equivalents in lower-level languages?</p>
+<p class="a">The <code>threading</code> module gives Lock, RLock, Semaphore, Event, Condition, Barrier, Queue. These are backed by OS primitives but acquired under the GIL, so uncontended acquisition is very fast. The one that surprises people: <code>threading.Lock</code> is not reentrant — same thread acquiring twice deadlocks. Use <code>RLock</code> if you need reentry. <code>asyncio</code> mirrors the API with <code>asyncio.Lock</code>, <code>asyncio.Semaphore</code>, etc., but they only work inside the event loop. Different in spirit from C++ or Rust: Python's GIL means you rarely need fine-grained locking because most operations serialize already, so the common mistake is over-locking. The other common mistake is under-locking read-modify-write sequences on shared state, which are not atomic despite the GIL.</p>
+</div>
+
+<div class="qa">
+<p class="q">How do you avoid GIL contention when calling into a C library that takes a long time?</p>
+<p class="a">The C function should release the GIL around its work using the <code>Py_BEGIN_ALLOW_THREADS</code> / <code>Py_END_ALLOW_THREADS</code> macro pair. While those macros are in effect, other Python threads can run freely. Caveats: you cannot touch Python objects while the GIL is released, and you must re-acquire before returning anything to the caller. NumPy, BLAS, hashlib, zlib, and most of the stdlib I/O subsystem already do this. If you're calling a library that doesn't, and you control the wrapper, you can drop the GIL explicitly in your pybind11 / ctypes shim. This is also the prerequisite for threads to actually help with C-bound work.</p>
+</div>
+
+<h3>Language design and judgment</h3>
+
+<div class="qa">
+<p class="q">What's your mental model for when to use a dict vs a dataclass vs a NamedTuple?</p>
+<p class="a">Dicts for dynamic or schema-less data where keys are not known at write time — config overlays, JSON payloads, intermediate aggregations. Dataclasses for named, typed records with a fixed shape — the 90% default for domain modeling. Use <code>@dataclass(slots=True, frozen=True)</code> when you want memory-efficient, hashable, immutable values. NamedTuples when you also need tuple indexing and unpacking (e.g., interoperating with code that expects tuples) or when you really need immutability without the dataclass decorator machinery. For runtime validation of external data, reach for pydantic or msgspec instead. The biggest anti-pattern is passing bare dicts across module boundaries — they're un-typed, un-IDE-discoverable, and every consumer re-implements the "did the key exist" check.</p>
+</div>
+
+<div class="qa">
+<p class="q">What does "Pythonic" mean to you?</p>
+<p class="a">Functionally: code that takes advantage of the language features rather than transliterating idioms from another language. Concretely, that means using comprehensions and generator expressions instead of manual loops that append; using context managers for resource lifetime; using the iteration protocol and <code>yield</code> instead of state machines; using the stdlib collections rather than reinventing them; using duck typing and protocols over deep inheritance hierarchies; using exceptions for exceptional conditions and EAFP for expected happy paths; and using type hints and docstrings to make intent legible. Culturally, the Zen of Python — "flat is better than nested," "explicit is better than implicit" — captures the aesthetic. Anti-Pythonic code is usually recognizable as Java or C++ translated literally: getter/setter boilerplate, deep inheritance, manual iterator classes, checking types with <code>isinstance</code> everywhere.</p>
+</div>
+
+<div class="qa">
+<p class="q">If you could change one thing about Python, what would it be?</p>
+<p class="a">A sincere answer that also signals depth: I'd want the GIL removed cleanly — which is in flight with PEP 703 — but more importantly, I'd want the packaging story unified. The fragmentation between pip, conda, poetry, pip-tools, pdm, and uv has cost more engineering hours in the Python community than any other single issue, and it's improving but still painful. A less political answer: faster startup. For CLI tools and serverless, 50-100 ms is a real cost, and most of it is module import machinery that could be short-circuited with better caching or AOT-compiled frozen modules. An honest answer you can defend beats a safe answer every time.</p>
+</div>
+
+<div class="qa">
+<p class="q">What are you most excited about in modern Python?</p>
+<p class="a">Three things I'd name. First, the specializing interpreter and the incoming JIT — CPython is finally getting meaningfully faster on real workloads without requiring a rewrite. Second, free-threaded Python in 3.13 — the GIL has been the single biggest architectural constraint for a decade and removing it opens up concurrency designs that were impossible before. Third, the type system: <code>Self</code>, <code>ExceptionGroup</code>, the new generic syntax (PEP 695), and the ever-improving <code>pydantic</code> / <code>msgspec</code> ecosystem are turning Python into something you can ship at scale with real confidence. Honorable mention: <code>polars</code> and <code>PyArrow</code> are changing how data science Python is written.</p>
+</div>
+
+<h3>Behavioral and code-quality</h3>
+
+<div class="qa">
+<p class="q">How do you approach reviewing someone else's Python code?</p>
+<p class="a">I read it in three passes. First pass for correctness: does it actually do what the PR claims, and does it handle the obvious edge cases — empty inputs, None, type coercion, failure modes. Second pass for structure: is the function doing one thing, are the names honest, is the control flow readable without a map, are the abstractions at consistent levels. Third pass for risk: does it share mutable state, leak resources, broaden an exception net, introduce a silent dependency, create latency in a hot path, depend on undocumented behavior. I try to leave reviews that say why I'm concerned, not just what to change — the goal is for the author to catch similar issues on the next PR without me.</p>
+</div>
+
+<div class="qa">
+<p class="q">Tell me about a time you dug into a Python internals question to answer a production problem.</p>
+<p class="a">[Remus: this is where you'd tell a story — have one rehearsed.] Good shape: a symptom (e.g., memory growth that stabilized at a weird plateau, or an asyncio service with p99 spikes), a hypothesis-test loop (what you measured, what you ruled out), the actual cause (e.g., pymalloc arena fragmentation, or a sync JSON parse blocking the loop), and what you changed plus how you verified. Interviewers want to see that you treat performance as a measurement discipline, not as pattern-matching on buzzwords.</p>
+</div>
+
+<hr>
+
+<h3>Things to drop into answers when they fit</h3>
+<ul>
+<li>"CPython is a specializing interpreter, not a JIT — yet."</li>
+<li>"Refcounting for promptness, cycle collection for completeness."</li>
+<li>"The GIL exists because refcounting needs serialization; PEP 703 removes both constraints together."</li>
+<li>"Data descriptors beat instance dicts, non-data descriptors don't."</li>
+<li>"<code>Py_BEGIN_ALLOW_THREADS</code> is why Python threads aren't useless."</li>
+<li>"Vectorization is a win because it stops running the interpreter, not because it runs it faster."</li>
+<li>"In a latency shop, Python is glue around C++, not a replacement for it."</li>
+</ul>
+
+<div class="callout tip">
+<div class="label">Final advice</div>
+The best interview signal is precision. Two candidates can give the same high-level answer, but the one who says "the default switch interval is 5 ms and you can change it with <code>sys.setswitchinterval</code>" or "gen0 default threshold is 700 allocations" sounds like they actually live in this language. Seed a handful of specific numbers into each topic so you can drop them naturally.
+</div>
+</section>
+
+<footer>Advanced Python Interview Guide &middot; Remus Kwan</footer>
+</main>
+</div>
+<script>
+// Wrap all tables in a scroll container (for mobile horizontal scroll)
+document.querySelectorAll('table').forEach(t => {
+  const w = document.createElement('div');
+  w.className = 'table-wrap';
+  t.parentNode.insertBefore(w, t);
+  w.appendChild(t);
+});
+
+// TOC drawer toggle
+const btn      = document.getElementById('toc-btn');
+const toc      = document.getElementById('toc-nav');
+const backdrop = document.getElementById('toc-backdrop');
+
+function openToc() {
+  toc.classList.add('open');
+  backdrop.classList.add('visible');
+  btn.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden';
+}
+function closeToc() {
+  toc.classList.remove('open');
+  backdrop.classList.remove('visible');
+  btn.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+function toggleToc() {
+  toc.classList.contains('open') ? closeToc() : openToc();
+}
+
+btn.addEventListener('click', toggleToc);
+backdrop.addEventListener('click', closeToc);
+
+// Close drawer when a TOC link is tapped on mobile
+toc.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  if (window.innerWidth <= 900) closeToc();
+}));
+
+// Close on Escape
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeToc(); });
+
+// Highlight active TOC link as user scrolls
+const sections = document.querySelectorAll('section[id]');
+const tocLinks = document.querySelectorAll('nav.toc a');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      tocLinks.forEach(l => l.style.color = '');
+      const active = toc.querySelector(`a[href="#${entry.target.id}"]`);
+      if (active) { active.style.color = 'var(--accent)'; active.style.fontWeight = '600'; }
+    }
+  });
+  // reset font weight on others
+  tocLinks.forEach(l => {
+    if (l.style.color !== 'var(--accent)') l.style.fontWeight = '';
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
